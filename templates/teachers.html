@@ -1,79 +1,88 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-    <title>Dynamic Dropdown</title>
-    <style>
-        /* Style for the dropdown button */
-        .dropbtn {
-            background-color: #4CAF50;
-            color: white;
-            padding: 16px;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Teacher Page</title>
 
-        /* The container div - needed to position the dropdown content */
-        .dropdown {
-            position: relative;
-            display: inline-block;
-        }
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
-        /* Dropdown Content (Hidden by Default) */
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: #f9f9f9;
-            min-width: 160px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-        }
-
-        /* Links inside the dropdown */
-        .dropdown-content a {
-            color: black;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-        }
-
-        /* Show the dropdown menu on hover */
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-
-        /* Change color of dropdown links on hover */
-        .dropdown-content a:hover {
-            background-color: #f1f1f1;
-        }
-    </style>
+  <link href="https://fonts.cdnfonts.com/css/gg-sans-2" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/fonts.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}">
 </head>
+
 <body>
+  <nav>
+    <div class="nav-container">
+      <section>Welcome {{ name }}!</section>
+      <ul>
+        {% if registered %}
+        <li><a href="/teacher/create_class">Create a Class</a></li>
+        {% endif %}
 
-<a href="/">
-    <button>Go back to main page</button>
-</a>
+        {% if sub %}
+        <form id="refreshForm" action="/refresh_account_type" method="post">
+          <input type="submit" id="refreshButton" class="nav-button" value="Refresh Account Type"><br>
+        </form>
 
-{% if error %}
-<p style="color: red;">{{ error }}</p>
-{% endif %}
+        <script src="{{ url_for('static', filename='js/refresh_cooldown.js') }}"></script>
+        {% endif %}
 
-<form method="post">
-    {{ form.hidden_tag() }}
-    {{ form.query.label }} {{ form.query() }}
-    {{ form.submit() }}
-</form>
-
-{% if items %}
-<div class="dropdown">
-    <button class="dropbtn">Results</button>
-    <div class="dropdown-content">
-        {% for item in items %}
-            <a href="#">{{ item['class_name'] }}</a>
-        {% endfor %}
+        <li><a href="/logout">Logout</a></li>
+      </ul>
     </div>
-</div>
-{% endif %}
+  </nav>
 
+  <div class="content-wrapper">
+    <div class="main-content">
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <ul>
+          {% for message in messages %}
+          <h3>{{ message }}</h3>
+          {% endfor %}
+      </ul>
+      {% endif %}
+      {% endwith %}
+
+      {% if not email_verified %}
+      <h3>Email not Verified</h3>
+      {% elif email_verified %}
+      <h3>Email Verified</h3>
+      {% endif %}
+
+      {% if sub %}
+      <h2>Account ID: {{sub}}</h2>
+      {% endif %}
+
+      {% if registered and not classes %}
+      <h3>You don't have any classes yet! <a href="/teacher/create_class">Create a class</a> to get started.</h3>
+      {% endif %}
+
+      {% if registered and classes %}
+      <h2>Classes you Manage</h2>
+      {% for class in classes %}
+      <h3><a href="/class/{{ class[0] }}">{{ class[2] }}</a>: {{ class[5] }}</h3>
+      {% endfor %}
+
+      {% elif registered and other_classes %}
+      <h2>Other Classes</h2>
+        {% for class in other_classes %}
+        <h3><a href="/class/{{ class[0] }}">{{ class[2] }}</a>: {{ class[5] }}</h3>
+        {% endfor %}
+      {% elif not registered %}
+      <form action="/teacher_submit" method="post">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <input type="submit" value="Submit">
+      </form>
+      {% endif %}
+    </div>
+  </div>
 </body>
+
 </html>

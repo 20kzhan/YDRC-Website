@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{ class_name }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/class.css') }}">
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <section>Hello {{ name }}!</section>
+            <ul>
+                <li><a href="/">Back</a></li>
+            </ul>
+        </div>
+    </nav>
+    <div class="content-wrapper">
+        <div class="main-content">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <h3>{{ message }}</h3>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+
+            <h1 class="class-title">{{ class_name }}</h1>
+            <h3>{{ teacher_name }}</h3>
+            <p>{{ teacher_intro }}</p>
+            <p>{{ class_description }}</p>
+            <p><strong>Schedule:</strong> {{ class_schedule }}</p>
+            <p><strong>Class Plan:</strong> {{ class_plan }}</p>
+            <p><strong>Requirements:</strong> {{ class_requirements }}</p>
+            <p>{{ 'Additional Notes: ' + other_notes if other_notes else '' }}</p>
+
+            {% if not enrolled %}
+            <form id="refreshForm" action="/enroll/{{ class_id }}" method="post">
+                <input type="hidden" name="sub" value="{{ sub }}">
+                <input type="submit" id="enrollButton" class="nav-button enroll-button no-margin-button" value="Enroll" {{ "" if can_enroll else "disabled" }}><br>
+            </form>
+            {% else %}
+            <form id="refreshForm" action="/unenroll/{{ class_id }}" method="post">
+                <input type="hidden" name="sub" value="{{ sub }}">
+                <input type="submit" id="unenrollButton" class="nav-button unenroll-button no-margin-button" value="Unenroll"><br>
+            </form>
+            {% endif %}
+        </div>
+    </div>
+</body>
+</html>

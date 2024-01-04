@@ -1,23 +1,97 @@
 <!DOCTYPE html>
 <html>
-<head>
-    <title>YDRC Grading System</title>
 
-    <style>
-        a {
-            display: block;
-            margin-bottom: 10px;
-        }
-    </style>
+<head>
+  <meta charset="utf-8">
+  <title>YDRC Grading System</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+  <script src="{{ url_for('static', filename='js/refresh_user.js') }}"></script>
+
+  <link href="https://fonts.cdnfonts.com/css/gg-sans-2" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/fonts.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}">
 </head>
+
 <body>
-    <!--
-    <a href="/teachers">
-        <button>Go to Teachers Page</button>
-    </a>
-    -->
-    <a href="/students">
-        <button>Go to Students Page</button>
-    </a>
+  <nav>
+    <div class="nav-container">
+      <section>Hello {{ name }}!</section>
+      <ul>
+        {% if sub %}
+        <form id="refreshForm" action="/refresh_account_type" method="post">
+          <input type="submit" id="refreshButton" class="nav-button" value="Refresh Account Type"><br>
+        </form>
+
+        <script src="{{ url_for('static', filename='js/refresh_cooldown.js') }}"></script>
+        {% endif %}
+
+        <li><a href="/logout">Logout</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="content-wrapper">
+    <div class="main-content">
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <ul>
+        {% for message in messages %}
+        <h3>{{ message }}</h3>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% endwith %}
+
+      {% if not email_verified %}
+      <h3>Email not Verified</h3>
+      {% elif email_verified %}
+      <h3>Email Verified</h3>
+      {% endif %}
+
+      {% if session and not email %}
+      {% if request.args.get('error') == 'missing-fields' %}
+      <div class="error-message">Please fill in all required fields.<br><br></div>
+      {% endif %}
+
+      <form action="/student_submit" method="post">
+        <label for="name">Student's Full Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="dob">Student's Date of Birth:</label>
+        <input type="text" id="dob" name="dob" class="validate" required><br><br>
+
+        <label for="wechat">Parent's WeChat (微信) ID:</label>
+        <input type="text" id="wechat" name="wechat" required><br><br>
+
+        <label for="p_email">Parent's Email:</label>
+        <input type="email" id="p_email" name="p_email" required><br><br>
+
+        <input type="submit" class="nav-button no-margin-button" value="Submit">
+      </form>
+      <script src="{{ url_for('static', filename='js/dob.js') }}"></script>
+
+      <p><a href="/logout" id="qsLogoutBtn">Logout</a></p>
+      <div>
+        <pre>{{pretty}}</pre>
+      </div>
+
+      {% elif session and email %}
+      {% if sub %}
+      <h2>Account ID: {{sub}}</h2>
+      {% endif %}
+
+      {% for class in classes %}
+      <h3><a href="/class/{{ class[0] }}">{{ class[2] }}</a>: {{ class[5] }}</h3>
+      {% endfor %}
+
+      {% else %}
+      <h1 id="profileDropDown">Welcome Guest</h1>
+      <p><a href="/login" id="qsLoginBtn">Login</a></p>
+      {% endif %}
+    </div>
+  </div>
 </body>
+
 </html>
