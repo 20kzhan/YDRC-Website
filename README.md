@@ -17,7 +17,7 @@ There are three account types, each with different abilities.
 ![Example Student Page](https://github.com/gfdsohgdkoshgiodsbblbngsal/YDRC-Website/blob/main/Screenshot%202024-01-04%20224150.png?raw=true)
 
 - Teacher
-  - Teachers can create classes, and can also see a list of all the classes they own (and therefore can edit), and all the classes they can't edit. On the classes they created, they can change information about the class. (Seeing students and other things have not been implemented yet)
+  - Teachers can create classes, and can also see a list of all the classes they own (and therefore can edit), and all the classes they can't edit. On the classes they created, they can change information about the class. (Seeing the student roster and information have not been implemented yet)
 ![Example Teacher Page](https://github.com/gfdsohgdkoshgiodsbblbngsal/YDRC-Website/blob/main/Screenshot%202024-01-04%20224219.png?raw=true)
 ![Example Class Creation Page](https://github.com/gfdsohgdkoshgiodsbblbngsal/YDRC-Website/blob/main/Screenshot%202024-01-04%20224305.png?raw=true)
 
