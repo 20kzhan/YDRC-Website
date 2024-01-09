@@ -1,5 +1,5 @@
 # Website Example
-http://3.101.121.189:8000/
+http://54.241.13.167:8000/
 
 # Initial Sign Up 
 After creating an account, you will be prompted to enter your information. After entering your information, you will see your [`Account ID`](https://github.com/gfdsohgdkoshgiodsbblbngsal/YDRC-Website/edit/main/README.md#account-id) and a list of the [classes](https://github.com/gfdsohgdkoshgiodsbblbngsal/YDRC-Website/edit/main/README.md#classes) made by [teachers](https://github.com/gfdsohgdkoshgiodsbblbngsal/YDRC-Website/edit/main/README.md#account-types).
