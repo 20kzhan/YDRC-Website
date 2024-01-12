@@ -2,11 +2,11 @@
 http://54.241.13.167:8000/
 
 # Initial Sign Up 
-After creating an account, you will be prompted to enter your information. After entering your information, you will see your [`Account ID`](https://github.com/gfdsohgdkoshgiodsbblbngsal/YDRC-Website/edit/main/README.md#account-id) and a list of the [classes](https://github.com/gfdsohgdkoshgiodsbblbngsal/YDRC-Website/edit/main/README.md#classes) made by [teachers](README.md#account-types).
+After creating an account, you will be prompted to enter your information. After entering your information, you will see your [`Account ID`](#account-id) and a list of the [classes](#classes) made by [teachers](#account-types).
 
 # Account ID
 
-The Account ID on the main page is used to manually change user's [account types](https://github.com/gfdsohgdkoshgiodsbblbngsal/YDRC-Website/edit/main/README.md#account-types). I (currently) alone can change the account types of people. So, if a teacher is told about the website, I will get their Account ID and make their account a teacher account.
+The Account ID on the main page is used to manually change user's [account types](#account-types). I (currently) alone can change the account types of people. So, if a teacher is told about the website, I will get their Account ID and make their account a teacher account.
 
 # Account Types
 
