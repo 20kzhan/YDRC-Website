@@ -1,0 +1,196 @@
+html {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+body, html {
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #313338;
+}
+
+/* Full-width header */
+body nav {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  background-color: #23272a;
+  padding: 0 20px;
+}
+
+/* Centered content container */
+.nav-container {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 1vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Button styles */
+.nav-button {
+  font-family: gg sans, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+  text-decoration: none;
+  color: black;
+  background-color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  transition: background-color 0.3s;
+  margin-left: 20px;
+}
+
+.nav-button:hover {
+  color: #5865F2;
+  cursor: pointer;
+}
+
+.nav-button:disabled {
+  background-color: grey;
+  cursor: not-allowed;
+}
+
+.nav-button:disabled:hover {
+  color: black;
+}
+
+.no-margin-button {
+  margin-left: 0px;
+}
+
+.content-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.main-content {
+  display: grid;  
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+}
+
+ul {
+  display: flex;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  align-items: center;
+}
+
+li {
+  padding: 0;
+  margin-left: 20px;
+}
+
+.left-most {
+  margin-left: 0;
+}
+
+li a {
+  font-family: gg sans, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+  text-decoration: none;
+  color: black;
+  background-color: white;
+  padding: 10px 20px;
+  border-radius: 20px;
+  display: flex;
+}
+
+li a:hover {
+  color: #5865F2;
+}
+
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  place-items: center;
+  font-size: 50px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.main-content {
+  color: #fff;
+}
+
+p a {
+  color: #fff;
+}
+
+a {
+  color: #fff;
+  text-decoration-line: underline;
+  text-decoration-color: #fff;
+  text-decoration-style: solid;
+}
+
+/* New styles for .nav-links to align left */
+.nav-links {
+  flex-grow: 1; /* Allows the nav-links list to fill the available space on the left */
+  justify-content: flex-start; /* Aligns the links to the left */
+  display: flex; /* Ensures the items are in a row */
+  list-style: none; /* Removes bullet points from the list */
+  padding-left: 0; /* Removes default padding */
+  margin-right: auto; /* Pushes everything else to the right */
+}
+
+.settings-icon {
+  color: white; /* Icon color */
+  font-size: 24px; /* Icon size */
+  padding: 10px; /* Spacing around the icon */
+  margin-left: auto; /* Pushes the icon to the right */
+}
+
+/* Additional styling for hover effect */
+.settings-icon:hover {
+  color: #5865F2; /* Change color on hover */
+  cursor: pointer; /* Change cursor to indicate clickability */
+}
+
+.search-input {
+  padding: 14px;
+  border-radius: 5px;
+  background-color: #23272a;
+  color: white;
+  font-size: large;
+  margin-right: 10px;
+  border-style: none;
+}
+
+/* Styling to indicate focus */
+.search-input:focus {
+  outline: 2px solid #5b5b5b; /* Or any color/style of your choosing */
+}
+
+input {
+  font-family: 'gg sans', sans-serif;
+}
+
+.and-header {
+  display: flex; /* Use flex display for easy alignment and spacing */
+  justify-content: space-between; /* This will place one item on the far left and the other on the far right */
+  width: 100%; /* Ensure the container spans the entire width */
+  align-items: center; /* Align items vertically in the center */
+}
+
+.class-heading {
+  margin-right: auto; /* Ensures the header stays on the left */
+}
+
+.search-container {
+  display: flex; /* This makes it easier to align form elements inside .search-container */
+  margin-left: auto; /* This pushes the .search-container to the right */
+}

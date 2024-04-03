@@ -1,0 +1,28 @@
+.enroll-button {
+    background-color: #57F287;
+    color: #000;
+}
+
+.unenroll-button {
+    background-color: #E04245;
+    color: #000;
+}
+
+.class-title {
+    margin-bottom: 0;
+}
+
+.main-content p {
+    font-size: 20px;
+}
+
+input {
+    font-family: sans-serif;
+    font-size: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background: #1e1f22;
+    border-radius: 3px;
+    border: none;
+    height: 40px;
+}

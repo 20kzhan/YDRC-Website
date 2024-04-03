@@ -1,0 +1,107 @@
+form {
+    display: inline-block;
+}
+
+.custom-select {
+    position: relative;
+    width: 200px;
+    background-color: #23272a;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+}
+
+.custom-select .selected-value {
+    padding: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.custom-select .options-container {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #2b2d31;
+    border-radius: 0 0 5px 5px;
+    z-index: 999;
+    display: none;
+}
+
+.custom-select .options-container div {
+    padding: 10px;
+    border-bottom: 1px solid #555;
+    transition: background-color 0.2s;
+}
+
+.custom-select .options-container div:last-child {
+    border-bottom: none;
+    border-radius: 0 0 5px 5px;
+}
+
+.custom-select .options-container div:hover {
+    background-color: #444;
+}
+
+.acc-type-input {
+    padding: 14px;
+    border-radius: 5px;
+    background-color: #23272a;
+    color: white;
+    font-family: "gg sans", sans-serif;
+    font-size: large;
+    margin-right: 10px;
+    border-style: none;
+    min-width: 81px;
+    /* Additional styles to make it look more like an input */
+    outline: none; /* Remove the default focus outline */
+}
+
+.placeholder-style {
+    color: #757575; /* This will be the placeholder text color */
+}
+
+/* This will make the actual text color white, as per your .acc-type-input class */
+.acc-type-input:not(.placeholder-style) {
+    color: white;
+}
+
+/* Styling to indicate focus */
+.editable-input:focus {
+    outline: 2px solid #5b5b5b; /* Or any color/style of your choosing */
+}
+
+.status-message {
+    color: #757575;
+    /* Additional styles to make the status message look nice */
+    padding: 10px;
+    margin-top: 10px;
+}
+
+.tooltip-text {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: white;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    
+    /* Position the tooltip text */
+    position: absolute;
+    z-index: 1;
+    bottom: 100%;
+    left: 50%;
+    margin-left: -60px; /* Use half of the width value to center the tooltip */
+    
+    /* Fade in tooltip - optional */
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+th:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}

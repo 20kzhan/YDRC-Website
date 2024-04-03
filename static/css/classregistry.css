@@ -1,0 +1,18 @@
+.search-container {
+    display: flex; /* Aligns children (the forms) in a row */
+    align-items: center; /* Centers the forms vertically */
+}
+
+#searchForm, form {
+    display: inline-block; /* Treats the form as an inline block for alignment */
+}
+
+#searchForm input {
+    margin-right: 10px; /* Optional: Adds some space between the input and the button */
+}
+
+#searchInput {
+    padding-left: 8px; /* Adjust the padding as needed */
+    color: white;
+    font-family: "roboto";
+}
