@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 input[type="text"], input[type="email"], input[type="date"] {
     font-family: 'Arial', sans-serif;
     color: #333;
@@ -54,3 +55,61 @@ label {
         width: 100%; /* Full width on smaller screens */
     }
 }
+=======
+input[type="text"], input[type="email"], input[type="date"] {
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    font-size: 16px;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: calc(100% - 22px); /* Adjust width to account for padding and border */
+    box-sizing: border-box; /* Include padding and border in the element's total width and height */
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+input[type="text"]:focus, input[type="email"]:focus, input[type="date"]:focus {
+    outline: none;
+    border-color: #5865F2; /* Highlight color when the input is focused */
+    box-shadow: 0 0 5px rgba(88, 101, 242, 0.5); /* Subtle glow effect */
+}
+
+input[type="text"]::placeholder, input[type="email"]::placeholder, input[type="date"]::placeholder {
+    color: #aaa; /* Lighter text for placeholder */
+    opacity: 1; /* Full visibility for placeholder */
+}
+
+input[type="text"]:hover, input[type="email"]:hover, input[type="date"]:hover {
+    border-color: #999; /* Slightly darker border on hover */
+}
+
+/* You may also want to style buttons and labels for a complete look */
+button {
+    background-color: #5865F2; /* Button background color */
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #4752c4; /* Darker background on hover */
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+    color: #333;
+    font-size: 14px;
+}
+
+/* Ensure responsiveness */
+@media (max-width: 768px) {
+    input[type="text"], input[type="email"], input[type="date"], button {
+        width: 100%; /* Full width on smaller screens */
+    }
+}
+>>>>>>> f0664b25e0e2c0621c944bed919f34efc1cc8918

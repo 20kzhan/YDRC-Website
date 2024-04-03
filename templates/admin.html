@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 
@@ -283,4 +284,185 @@
     </div>
 </body>
 
+=======
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+
+    <style>
+        /* Add your styling here */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+    <link href="https://fonts.cdnfonts.com/css/gg-sans-2" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/fonts.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-container">
+            <section>Welcome {{ name }}!</section>
+            <ul>
+                {% if sub %}
+                <form id="refreshForm" action="/refresh_account_type" method="post">
+                    <input type="submit" id="refreshButton" class="nav-button" value="Refresh Account Type"><br>
+                </form>
+
+                <script src="{{ url_for('static', filename='js/refresh_cooldown.js') }}"></script>
+                {% endif %}
+
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content-wrapper">
+        <div class="main-content">
+            {% if not email_verified %}
+            <h3>Email not Verified</h3>
+            {% elif email_verified %}
+            <h3>Email Verified</h3>
+            {% endif %}
+            
+            {% if name == "Guest" %}
+            <form action="/admin_submit" method="post">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" required><br><br>
+        
+                <input type="submit" value="Submit">
+            </form>
+            {% endif %}
+
+            <h1>Students</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>student_id</th>
+                        <th>student_name</th>
+                        <th>student_email</th>
+                        <th>student_dob</th>
+                        <th>parent_wechat</th>
+                        <th>parent_email</th>
+                        <th>class_id</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in students %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ entry[0] }}</td>
+                        <td>{{ entry[1] }}</td>
+                        <td>{{ entry[2] }}</td>
+                        <td>{{ entry[3] }}</td>
+                        <td>{{ entry[4] }}</td>
+                        <td>{{ entry[5] }}</td>
+                        <td>{{ entry[6] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <h1>Teachers</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>teacher_id</th>
+                        <th>teacher_name</th>
+                        <th>teacher_email</th>
+                        <th>teacher_classes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in teachers %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ entry[0] }}</td>
+                        <td>{{ entry[1] }}</td>
+                        <td>{{ entry[2] }}</td>
+                        <td>{{ entry[3] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+            <h1>Classes</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>class_id</th>
+                        <th>teacher_id</th>
+                        <th>class_name</th>
+                        <th>teacher_intro</th>
+                        <th>class_schedule</th>
+                        <th>class_description</th>
+                        <th>class_plan</th>
+                        <th>class_requirements</th>
+                        <th>other_notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in classes %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ entry[0] }}</td>
+                        <td>{{ entry[1] }}</td>
+                        <td>{{ entry[2] }}</td>
+                        <td>{{ entry[3] }}</td>
+                        <td>{{ entry[4] }}</td>
+                        <td>{{ entry[5] }}</td>
+                        <td>{{ entry[6] }}</td>
+                        <td>{{ entry[7] }}</td>
+                        <td>{{ entry[8] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <h1>Admins</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>admin_id</th>
+                        <th>admin_name</th>
+                        <th>admin_email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in admins %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ entry[0] }}</td>
+                        <td>{{ entry[1] }}</td>
+                        <td>{{ entry[2] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+
+>>>>>>> f0664b25e0e2c0621c944bed919f34efc1cc8918
 </html>

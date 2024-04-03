@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 html {
   margin: 0;
   padding: 0;
@@ -194,3 +195,146 @@ input {
   display: flex; /* This makes it easier to align form elements inside .search-container */
   margin-left: auto; /* This pushes the .search-container to the right */
 }
+=======
+html {
+  margin: 0;
+  padding: 0;
+  scroll-behavior: smooth;
+}
+
+body, html {
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* removed whitney */
+  margin: 0;
+  padding: 0;
+  background-color: #313338;
+}
+
+/* Full-width header */
+body nav {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  background-color: #23272a;
+  padding: 0 20px;
+}
+
+/* Centered content container */
+.nav-container {
+  max-width: 1250px;
+  margin: 0 auto;
+  padding: 1vh;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Button styles */
+.nav-button {
+  font-family: gg sans, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+  text-decoration: none;
+  color: black; /* Text color */
+  background-color: white; /* Button background color */
+  padding: 10px 20px; /* Button padding, adjust as needed */
+  border-radius: 20px; /* Rounded corners, adjust as needed */
+  transition: background-color 0.3s; /* Smooth transition for hover effect */
+  margin-left: 20px; /* Space between navigation links */
+}
+
+/* Hover effect */
+.nav-button:hover {
+  color: #5865F2; /* Slightly lighter on hover */
+  cursor: pointer;
+}
+
+/* Disabled button styles */
+.nav-button:disabled {
+  background-color: grey; /* Disabled background color */
+  cursor: not-allowed; /* Shows a not-allowed cursor symbol */
+}
+
+/* Remove hover effect for disabled buttons */
+.nav-button:disabled:hover {
+  color: black; /* Same as disabled text color */
+}
+
+.no-margin-button {
+  margin-left: 0px;
+}
+
+.content-wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+/* Apply margins to main content */
+.main-content {
+  display: grid;  
+  width: 100%;
+  max-width: 1200px;
+  padding: 20px;
+}
+
+ul {
+  display: flex;
+  padding: 0;
+  margin: 0; /* Removes default margin */
+  list-style: none; /* Removes default list styles */
+  align-items: center;
+}
+
+/* List item styles */
+li {
+  padding: 0;
+  margin-left: 20px; /* Space between navigation links */
+}
+
+/* Link styles */
+li a {
+  font-family: gg sans, sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  line-height: 24px;
+  text-decoration: none;
+  color: black; /* Text color */
+  background-color: white; /* Button background color */
+  padding: 10px 20px; /* Button padding, adjust as needed */
+  border-radius: 20px; /* Rounded corners, adjust as needed */
+  display: flex;
+}
+
+/* Hover effect */
+li a:hover {
+  color: #5865F2; /* Slightly lighter on hover */
+}
+
+section {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  place-items: center;
+  font-size: 50px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.main-content {
+  color: #fff;
+}
+
+p a {
+  color: #fff;
+}
+
+a {
+  color: #fff;
+  text-decoration-line: underline;
+  text-decoration-color: #fff;
+  text-decoration-style: solid;
+}
+>>>>>>> f0664b25e0e2c0621c944bed919f34efc1cc8918
