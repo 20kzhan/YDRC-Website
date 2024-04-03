@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 <!DOCTYPE html>
 <html lang="en">
 
@@ -77,84 +76,4 @@
   </div>
 </body>
 
-=======
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Teacher Page</title>
-
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-
-  <link href="https://fonts.cdnfonts.com/css/gg-sans-2" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/fonts.css') }}">
-  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}">
-</head>
-
-<body>
-  <nav>
-    <div class="nav-container">
-      <section>Welcome {{ name }}!</section>
-      <ul>
-        <li><a href="/teacher">Back</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <div class="content-wrapper">
-    <div class="main-content">
-      {% if sub %}
-      <h2>Account ID: {{sub}}</h2>
-      {% endif %}
-
-      {% if registered %}
-      <h2>Create a New Class:</h2>
-
-      <form action="/teacher/create_class" method="post">
-        <label for="id">Class Name</label>
-        <input type="text" id="class_name" name="class_name" required><br><br>
-
-        <label for="teach_intro">Instructor Introduction:</label>
-        <input type="text" id="teach_intro" name="teach_intro" required><br><br>
-
-        <label for="class_sched">Class Schedule:</label>
-        <input type="text" id="class_sched" name="class_sched" required><br><br>
-
-        <!-- Course Duration (use ICS file later) -->
-
-        <div>
-          <label for="c_desc">Course Description:</label>
-        </div>
-        <textarea id="c_desc" name="c_desc" placeholder="Write something.." style="height:200px"
-          required></textarea><br><br>
-
-        <div>
-          <label for="c_plan">Course Plan:</label>
-        </div>
-        <textarea id="c_plan" name="c_plan" placeholder="Write something.." style="height:100px" required></textarea>
-
-        <p>Number of Students?</p>
-
-        <div>
-          <label for="c_req">Course Requirements:</label>
-        </div>
-        <textarea id="c_req" name="c_req" placeholder="Ate a banana" style="height:100px" required></textarea>
-
-        <div>
-          <label for="other_notes">Other Notes:</label>
-        </div>
-        <textarea id="other_notes" name="other_notes" placeholder="Write something.. (optional)"
-          style="height:100px"></textarea><br>
-
-        <input type="submit" value="Submit">
-      </form>
-      {% endif %}
-    </div>
-  </div>
-</body>
-
->>>>>>> f0664b25e0e2c0621c944bed919f34efc1cc8918
 </html>
