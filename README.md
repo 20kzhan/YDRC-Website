@@ -1,5 +1,5 @@
 # Website Example
-http://54.241.13.167:8000/
+http://54.176.19.164:443
 
 # Initial Sign Up 
 After creating an account, you will be prompted to enter your information. After entering your information, you will see your [`Account ID`](#account-id) and a list of the [classes](#classes) made by [teachers](#account-types).
