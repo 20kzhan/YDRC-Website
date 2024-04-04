@@ -13,6 +13,7 @@ from urllib.parse import quote_plus, urlencode
 from os import environ as env
 from auth0.authentication import Database, GetToken
 from authlib.integrations.flask_client import OAuth
+import authlib
 
 from flask_wtf import FlaskForm
 from wtforms import IntegerField, SubmitField
@@ -262,7 +263,10 @@ def home_page():
 
 @app.route("/callback", methods=["GET", "POST"])
 def callback():
-    token = oauth.auth0.authorize_access_token()
+    try:
+        token = oauth.auth0.authorize_access_token()
+    except authlib.integrations.base_client.errors.OAuthError as e:
+        return f"Please verify your email then click [here]({url_for('home_page')}) to access the website."
     session["user"] = token
 
     return redirect(url_for("home_page"))
