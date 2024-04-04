@@ -266,7 +266,7 @@ def callback():
     try:
         token = oauth.auth0.authorize_access_token()
     except authlib.integrations.base_client.errors.OAuthError as e:
-        return f"Please verify your email then click [here]({url_for('home_page')}) to access the website."
+        return render_template("email_verification.html", home_page_url=url_for("home_page", _external=True))
     session["user"] = token
 
     return redirect(url_for("home_page"))
