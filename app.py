@@ -11,7 +11,6 @@ import time
 from urllib.parse import quote_plus, urlencode
 
 from os import environ as env
-
 from dotenv import load_dotenv
 
 from auth0.authentication import Database, GetToken
