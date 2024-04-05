@@ -11,6 +11,9 @@ import time
 from urllib.parse import quote_plus, urlencode
 
 from os import environ as env
+
+from dotenv import load_dotenv
+
 from auth0.authentication import Database, GetToken
 from authlib.integrations.flask_client import OAuth
 import authlib
@@ -27,10 +30,13 @@ import pprint
 from extras import *
 from api_cmds import *
 
+load_dotenv()
+
 id_gen = SnowflakeGenerator(847)
 
 app = Flask(__name__)
 app.secret_key = env.get("APP_SECRET_KEY")
+app.config['MAX_RETRIES'] = 10
 socketio = SocketIO(app)
 
 REFRESH_COOLDOWN = 10
@@ -828,4 +834,4 @@ def class_registry():
     return "Page Disabled"
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", debug=True)
+    app.run(host="0.0.0.0", port=443, debug=True)
