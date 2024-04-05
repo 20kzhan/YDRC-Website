@@ -1,6 +1,16 @@
 # Website Example
 http://54.176.19.164:443
 
+# Currently Active Features
+
+- [x] Email Verification
+- [x] Teacher Class Creation (broken)
+- [ ] Student Class Registry
+- [ ] Student "My Classes"
+- [x] Admin Page
+- [ ] Admin ability to edit data
+- [x] Admin change account types
+
 # Initial Sign Up 
 After creating an account, you will be prompted to enter your information. After entering your information, you will see your [`Account ID`](#account-id) and a list of the [classes](#classes) made by [teachers](#account-types).
 
