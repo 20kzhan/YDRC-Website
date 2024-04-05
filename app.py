@@ -246,7 +246,7 @@ def home_page():
             return render_template('home.html',
                                    name=name,
                                    email=first_time(u_session['userinfo']['email']),
-                                   sub=sub[6:],
+                                   sub=sub,
                                    email_verified=email_verified,
                                    classes=classes)
         elif account_type == 'teacher':
@@ -328,7 +328,7 @@ def teacher():
     return render_template('teachers.html',
                            name=name,
                            registered=is_teacher_registered(session.get('user')['userinfo']['sub']),
-                           sub=sub[6:],
+                           sub=sub,
                            classes=classes,
                            other_classes=other_classes,
                            email_verified=email_verified)
@@ -355,7 +355,7 @@ def create_class():
         return render_template('create_class.html',
                                name=name,
                                registered=is_teacher_registered(sub),
-                               sub=sub[6:])
+                               sub=sub)
     elif request.method == "POST":
         id = next(id_gen)
 
@@ -679,7 +679,7 @@ def admin():
 
     return render_template('admin.html',
                            name=name,
-                           sub=sub[6:],
+                           sub=sub,
                            students=students,
                            teachers=teachers,
                            admins=admins,
@@ -819,7 +819,7 @@ def class_registry():
     
     return render_template('class_registry.html',
                            name=name,
-                           sub=sub[6:],
+                           sub=sub,
                            classes=classes)
 """
 
