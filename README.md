@@ -16,7 +16,7 @@ After creating an account, you will be prompted to enter your information. After
 
 # Account ID
 
-The Account ID on the main page is used to manually change user's [account types](#account-types). I (currently) alone can change the account types of people. So, if a teacher is told about the website, I will get their Account ID and make their account a teacher account.
+The Account ID on the main page is used to manually change user's [account types](#account-types). Any admin has the ability to change the account type of anyone. The input to do this is at the top of the page currently.
 
 # Account Types
 
