@@ -1,6 +1,10 @@
 # Website Example
 http://54.176.19.164:443
 
+# Issues
+- [ ] Email Verification Warning
+- [ ] Removing user from cache at logout
+- [ ] Same email with SSO and username password login counts as different accounts
 # Currently Active Features
 
 - [x] Email Verification
