@@ -45,6 +45,7 @@ async def main():
             async with session.delete(f"https://dev-op4dpb8txjx5ikl5.us.auth0.com/api/v2/users/{user_id}", headers={
                 "Authorization": f"Bearer {MANAGEMENT_API_KEY}"
             }) as resp:
+                await asyncio.sleep(3)
                 if resp.status != 204:
                     print(f"Failed to delete user {user_id}")
                     print(await resp.text())
