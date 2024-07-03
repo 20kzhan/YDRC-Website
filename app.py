@@ -184,13 +184,7 @@ def set_app_metadata(id, metadata: dict):
 def verify_email(user_id):
     url = f'https://{env.get("AUTH0_DOMAIN")}/api/v2/jobs/verification-email'
 
-    payload = json.dumps({
-    "user_id": user_id,
-    "client_id": env.get("AUTH0_CLIENT_ID"),
-    "identity": {
-        "user_id": user_id,
-        "provider": "google-oauth2"
-    }})
+    payload = json.dumps({"identity": {"user_id": user_id}})
 
     headers = {
         'Content-Type': 'application/json',
@@ -248,6 +242,8 @@ def home_page():
                 name = get_name('student', sub)
             
             classes = get_student_classes(sub)
+            if not classes:
+                classes = []
             
             return render_template('home.html',
                                    name=name,
@@ -272,6 +268,8 @@ def callback():
     try:
         token = oauth.auth0.authorize_access_token()
     except authlib.integrations.base_client.errors.OAuthError as e:
+        print("OAuthError: " + str(e))
+        # verify_email()
         return render_template("email_verification.html", home_page_url=url_for("home_page", _external=True))
     session["user"] = token
 
@@ -541,6 +539,9 @@ def already_enrolled(class_id, sub):
         cursor = db.cursor()
         cursor.execute("SELECT class_id FROM students WHERE student_id = ?", (sub,))
         result = cursor.fetchone()
+        if not result:
+            return False
+
         result = list(map(int, result[0].split(",")))
         if class_id in result:
             return True
@@ -806,7 +807,6 @@ def student_submit():
         
         return redirect('/')
 
-"""
 @app.route('/class_registry')
 def class_registry():
     # Login Required
@@ -827,11 +827,6 @@ def class_registry():
                            name=name,
                            sub=sub,
                            classes=classes)
-"""
-
-@app.route('/class_registry')
-def class_registry():
-    return "Page Disabled"
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=443, debug=True)

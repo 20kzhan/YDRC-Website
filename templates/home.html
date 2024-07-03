@@ -59,6 +59,10 @@
       <h3>Email Verified</h3>
       {% endif %}
 
+      {% if sub %}
+      <h2>Account ID: {{sub}}</h2>
+      {% endif %}
+
       {% if session and not email %}
       {% if request.args.get('error') == 'missing-fields' %}
       <div class="error-message">Please fill in all required fields.<br><br></div>
@@ -87,13 +91,14 @@
       </div>
 
       {% elif session and email %}
-      {% if sub %}
-      <h2>Account ID: {{sub}}</h2>
-      {% endif %}
 
+      {% if classes %}
       {% for class in classes %}
       <h3><a href="/class/{{ class[0] }}">{{ class[2] }}</a>: {{ class[5] }}</h3>
       {% endfor %}
+      {% else %}
+      <h3>You currently aren't enrolled in any classes yet! Find new ones in the <a href="/class_registry">class registry</a>.</h3>
+      {% endif %}
   
       {% else %}
       <h1 id="profileDropDown">Welcome Guest</h1>
