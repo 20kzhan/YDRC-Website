@@ -482,7 +482,8 @@ def class_page(class_id):
                 students = []
         
         return render_template(f'class_teacher.html',
-                               class_owner=teacher_owns_class(sub, class_id),
+                               class_owner=(True if get_user(sub)["app_metadata"]["account_type"] == 'admin' 
+                                            else teacher_owns_class(sub, class_id)),
                                name=name,
                                sub=sub,
                                class_id=class_id,
