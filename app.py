@@ -314,6 +314,8 @@ def teacher():
         cursor = db.cursor()
         cursor.execute("SELECT * FROM teachers WHERE teacher_id != ?", (sub,))
         other_classes = cursor.fetchone()
+    
+    print(other_classes)
 
     user = get_user(sub)
 
