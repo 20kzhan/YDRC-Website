@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const selectedValueDiv = document.getElementById('selectedValue');
+    const customSelectDiv = document.getElementById('customSelect');
     const optionsContainer = document.getElementById('optionsContainer');
     const hiddenInput = document.getElementById('hiddenInput');
 
@@ -24,14 +25,14 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Toggle options display on click
-    selectedValueDiv.addEventListener('click', () => {
+    customSelectDiv.addEventListener('click', () => {
         const isOptionsVisible = optionsContainer.style.display === 'block';
         optionsContainer.style.display = isOptionsVisible ? 'none' : 'block';
     });
 
     // Hide options if clicked outside of the dropdown
     window.addEventListener('click', (e) => {
-        if (!selectedValueDiv.contains(e.target)) {
+        if (!customSelectDiv.contains(e.target)) {
             optionsContainer.style.display = 'none';
         }
     });
