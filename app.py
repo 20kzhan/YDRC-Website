@@ -68,6 +68,9 @@ def get_teacher_classes(teacher_id):
     finally:
         conn.close()
     
+    if result[0] == "0,0,0,0,0":
+        return None
+    
     return result
 
 def get_student_classes(student_id):
