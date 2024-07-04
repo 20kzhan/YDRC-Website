@@ -145,6 +145,7 @@ def get_user(id):
     
     logging.info(f"User {id} not found in cache, fetching from Auth0")
     url = f'https://{env.get("AUTH0_DOMAIN")}/api/v2/users/{id}'
+    print(url)
 
     payload = {}
     headers = {
