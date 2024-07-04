@@ -312,7 +312,7 @@ def teacher():
 
     with sqlite3.connect("YDRC.db") as db:
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM teachers WHERE teacher_id != ?", (sub,))
+        cursor.execute("SELECT * FROM classes WHERE teacher_id != ?", (sub,))
         other_classes = cursor.fetchone()
     
     print(other_classes)
@@ -413,7 +413,9 @@ def class_page(class_id):
             logging.warning(f"User {session.get('user')['userinfo']['sub']} not in cache (Refresh Account Type)")
             get_user(session.get('user')['userinfo']['sub'])
     
-    if session.get('account_type') == 'student':
+    sub = session['user']['userinfo']['sub']
+    
+    if get_user(sub)["app_metadata"]["account_type"] == 'student':
         conn = sqlite3.connect('YDRC.db')
         try:
             cursor = conn.cursor()
@@ -448,7 +450,7 @@ def class_page(class_id):
                             class_plan=result[6],
                             class_requirements=result[7],
                             other_notes=result[8])
-    elif session.get('account_type') == 'teacher':
+    elif get_user(sub)["app_metadata"]["account_type"] == 'teacher' or get_user(sub)["app_metadata"]["account_type"] == 'admin':
         with sqlite3.connect("YDRC.db") as db:
             cursor = db.cursor()
             cursor.execute("SELECT * FROM classes WHERE class_id = ?", (class_id,))
