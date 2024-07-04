@@ -716,7 +716,7 @@ def change_account_type():
         if get_user(session.get('user')['userinfo']['sub'])['app_metadata']['account_type'] != 'admin':
             return jsonify(success=False, message="You do not have permission to do this.")
         
-        sub = request.form['id']
+        sub = request.form['sub']
 
         print(sub)
         old_type = get_user(sub)['app_metadata']['account_type']
