@@ -303,7 +303,7 @@ def logout():
 def teacher():
     if not session.get('user'):
         return redirect('/login')
-    if session.get('account_type') != 'teacher':
+    if get_user(session['user']['userinfo']['sub'])["app_metadata"]["account_type"] != 'teacher':
         flash(f'Teacher? Contact the person who gave you this link with your Account ID below.')
         return redirect('/')
 
@@ -347,7 +347,7 @@ def teacher():
 def create_class():
     if not session.get('user'):
         return redirect('/login')
-    if session.get('account_type') != 'teacher':
+    if get_user(session['user']['userinfo']['sub'])["app_metadata"]["account_type"] != 'teacher':
         flash(f'Teacher? Contact the person who gave you this link with your Account ID below.')
         return redirect('/')
 
@@ -400,7 +400,7 @@ def create_class():
 def class_page(class_id):
     if not session.get('user'):
         return redirect(url_for('login_page'))
-    if session.get('account_type') == 'student':
+    if get_user(session['user']['userinfo']['sub'])["app_metadata"]["account_type"] == 'student':
         if not first_time(session.get('user')['userinfo']['email']):
             flash(f'You must enter your information before signing up for classes.')
             return redirect(url_for('home_page'))
