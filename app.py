@@ -382,6 +382,9 @@ def create_class():
             cursor.execute("SELECT teacher_classes FROM teachers WHERE teacher_id = ?", (sub,))
             t_classes = cursor.fetchone()
             t_classes = list(map(int, t_classes[0].split(",")))
+            if t_classes.index(0) == -1:
+                flash(f'You have reached the maximum number of classes you can teach. Please contact an administrator if you need to teach more.')
+                return redirect('/teacher')
             t_classes[t_classes.index(0)] = class_id
             cursor.execute("UPDATE teachers SET teacher_classes = ? WHERE teacher_id = ?", (",".join(map(str, t_classes)), sub))
             db.commit()
@@ -732,6 +735,10 @@ def change_account_type():
             else:
                 cursor.execute(f"UPDATE {new_type}s SET active = 1 WHERE {new_type}_id = ?", (sub,))
             cursor.execute(f"UPDATE {old_type}s SET active = 0 WHERE {old_type}_id = ?", (sub,))
+
+            if new_type == 'teacher':
+                cursor.execute("UPDATE teachers SET teacher_classes = ? WHERE teacher_id = ?", ('0,0,0,0,0', sub))
+
             db.commit()
         
         set_app_metadata(sub, {'account_type': new_type})
