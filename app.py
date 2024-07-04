@@ -59,22 +59,22 @@ class SearchForm(FlaskForm):
     query = IntegerField('Search Query', validators=[DataRequired(), NumberRange(min=1)])
     submit = SubmitField('Search')
 
-def get_teacher_classes(id):
+def get_teacher_classes(teacher_id):
     conn = sqlite3.connect('YDRC.db')
     try:   
         cursor = conn.cursor()
-        cursor.execute('SELECT * FROM classes WHERE teacher_id = ?', (id,))
+        cursor.execute('SELECT * FROM classes WHERE teacher_id = ?', (teacher_id,))
         result = cursor.fetchall()
     finally:
         conn.close()
     
     return result
 
-def get_student_classes(id):
+def get_student_classes(student_id):
     conn = sqlite3.connect('YDRC.db')
     try:   
         cursor = conn.cursor()
-        cursor.execute('SELECT class_id FROM students WHERE student_id = ?', (id,))
+        cursor.execute('SELECT class_id FROM students WHERE student_id = ?', (student_id,))
         student_class_ids = cursor.fetchone()
         if not student_class_ids:
             return None
@@ -104,12 +104,12 @@ def first_time(email):
     else:
         return None
 
-def get_name(db_type: str, id: str) -> str:
-    print(id)
+def get_name(db_type: str, thing_id: str) -> str:
+    print(thing_id)
     conn = sqlite3.connect('YDRC.db')
     try:
         cursor = conn.cursor()
-        cursor.execute(f'SELECT {db_type}_name FROM {db_type}s WHERE {db_type}_id = ?', (id,))
+        cursor.execute(f'SELECT {db_type}_name FROM {db_type}s WHERE {db_type}_id = ?', (thing_id,))
         result = cursor.fetchone()
     finally:
         conn.close()
@@ -138,13 +138,13 @@ def is_teacher_registered(sub):
         conn.close()
     return result != None
 
-def get_user(id):
-    if id in user_cache:
-        logging.info(f"User {id} found in cache")
-        return user_cache[id]
+def get_user(sub):
+    if sub in user_cache:
+        logging.info(f"User {sub} found in cache")
+        return user_cache[sub]
     
-    logging.info(f"User {id} not found in cache, fetching from Auth0")
-    url = f'https://{env.get("AUTH0_DOMAIN")}/api/v2/users/{id}'
+    logging.info(f"User {sub} not found in cache, fetching from Auth0")
+    url = f'https://{env.get("AUTH0_DOMAIN")}/api/v2/users/{sub}'
     print(url)
 
     payload = {}
@@ -162,12 +162,12 @@ def get_user(id):
 
     user = response.json()
 
-    user_cache[id] = user
+    user_cache[sub] = user
 
     return user
 
-def set_app_metadata(id, metadata: dict):
-    url = f'https://{env.get("AUTH0_DOMAIN")}/api/v2/users/{id}'
+def set_app_metadata(sub, metadata: dict):
+    url = f'https://{env.get("AUTH0_DOMAIN")}/api/v2/users/{sub}'
 
     payload = json.dumps({"app_metadata": metadata})
     headers = {
@@ -362,7 +362,7 @@ def create_class():
                                registered=is_teacher_registered(sub),
                                sub=sub)
     elif request.method == "POST":
-        id = next(id_gen)
+        class_id = next(id_gen)
 
         class_name = request.form["class_name"]
         teach_intro = request.form["teach_intro"]
@@ -378,11 +378,11 @@ def create_class():
         with sqlite3.connect("YDRC.db") as db:
             cursor = db.cursor()
             cursor.execute("INSERT INTO classes (class_id, teacher_id, class_name, teacher_intro, class_schedule, class_description, class_plan, class_requirements, other_notes) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-                           (id, session.get('user')['userinfo']['sub'], class_name, teach_intro, class_sched, c_desc, c_plan, c_req, other_notes))
+                           (class_id, session.get('user')['userinfo']['sub'], class_name, teach_intro, class_sched, c_desc, c_plan, c_req, other_notes))
             cursor.execute("SELECT teacher_classes FROM teachers WHERE teacher_id = ?", (sub,))
             t_classes = cursor.fetchone()
             t_classes = list(map(int, t_classes[0].split(",")))
-            t_classes[t_classes.index(0)] = id
+            t_classes[t_classes.index(0)] = class_id
             cursor.execute("UPDATE teachers SET teacher_classes = ? WHERE teacher_id = ?", (",".join(map(str, t_classes)), sub))
             db.commit()
 
@@ -630,13 +630,13 @@ def unenroll(class_id):
 @app.route('/teacher_submit', methods=['POST'])
 def teacher_submit():
     if request.method == "POST":
-        id = session.get('user')['userinfo']['sub']
+        teacher_sub = session.get('user')['userinfo']['sub']
         name = request.form['name']
         email = session.get('user')['userinfo']['email']
 
         with sqlite3.connect("YDRC.db") as db:
             cursor = db.cursor()
-            cursor.execute("INSERT INTO teachers (teacher_id, teacher_name, teacher_email, teacher_classes) VALUES (?, ?, ?, ?)", (id, name, email, "0,0,0,0,0"))
+            cursor.execute("INSERT INTO teachers (teacher_id, teacher_name, teacher_email, teacher_classes) VALUES (?, ?, ?, ?)", (teacher_sub, name, email, "0,0,0,0,0"))
             db.commit()
         
         return redirect('/teacher')
@@ -696,13 +696,13 @@ def admin():
 @app.route('/admin_submit', methods=['POST'])
 def admin_submit():
     if request.method == "POST":
-        id = session.get('user')['userinfo']['sub']
+        admin_sub = session.get('user')['userinfo']['sub']
         name = request.form['name']
         email = session.get('user')['userinfo']['email']
 
         with sqlite3.connect("YDRC.db") as db:
             cursor = db.cursor()
-            cursor.execute("INSERT INTO admins (admin_id, admin_name, admin_email) VALUES (?, ?, ?)", (id, name, email))
+            cursor.execute("INSERT INTO admins (admin_id, admin_name, admin_email) VALUES (?, ?, ?)", (admin_sub, name, email))
             db.commit()
         
         return redirect('/admin')
@@ -715,24 +715,26 @@ def change_account_type():
 
         if get_user(session.get('user')['userinfo']['sub'])['app_metadata']['account_type'] != 'admin':
             return jsonify(success=False, message="You do not have permission to do this.")
+        
+        sub = request.form['id']
 
-        print(id)
-        old_type = get_user(id)['app_metadata']['account_type']
+        print(sub)
+        old_type = get_user(sub)['app_metadata']['account_type']
         new_type = request.form['accountType']
         if new_type not in ['student', 'teacher', 'admin']:
             return jsonify(success=False, message="Invalid account type")
         
         with sqlite3.connect("YDRC.db") as db:
             cursor = db.cursor()
-            cursor.execute(f"SELECT {new_type}_id FROM {new_type}s WHERE {new_type}_id = ?", (id,))
+            cursor.execute(f"SELECT {new_type}_id FROM {new_type}s WHERE {new_type}_id = ?", (sub,))
             if not cursor.fetchone():
-                cursor.execute(f"INSERT INTO {new_type}s ({new_type}_id, active) VALUES (?, ?)", (id, 1))
+                cursor.execute(f"INSERT INTO {new_type}s ({new_type}_id, active) VALUES (?, ?)", (sub, 1))
             else:
-                cursor.execute(f"UPDATE {new_type}s SET active = 1 WHERE {new_type}_id = ?", (id,))
-            cursor.execute(f"UPDATE {old_type}s SET active = 0 WHERE {old_type}_id = ?", (id,))
+                cursor.execute(f"UPDATE {new_type}s SET active = 1 WHERE {new_type}_id = ?", (sub,))
+            cursor.execute(f"UPDATE {old_type}s SET active = 0 WHERE {old_type}_id = ?", (sub,))
             db.commit()
         
-        set_app_metadata(id, {'account_type': new_type})
+        set_app_metadata(sub, {'account_type': new_type})
 
         # add hyperlink to user's profile page when that's done
         return jsonify(success=True,
@@ -784,7 +786,7 @@ def check_cooldown():
 @app.route('/student_submit', methods=['POST'])
 def student_submit():
     if request.method == "POST":
-        id = session.get('user')['userinfo']['sub']
+        student_sub = session.get('user')['userinfo']['sub']
         s_email = session.get('user')['userinfo']['email']
 
         name = request.form['name']
@@ -798,7 +800,7 @@ def student_submit():
 
         with sqlite3.connect("YDRC.db") as db:
             cursor = db.cursor()
-            cursor.execute("INSERT INTO students (student_id, student_name, student_email, student_dob, parent_wechat, parent_email, class_id) VALUES (?, ?, ?, ?, ?, ?, ?)", (id, name, s_email, dob, wechat, p_email, "0,0,0,0,0"))
+            cursor.execute("INSERT INTO students (student_id, student_name, student_email, student_dob, parent_wechat, parent_email, class_id) VALUES (?, ?, ?, ?, ?, ?, ?)", (student_sub, name, s_email, dob, wechat, p_email, "0,0,0,0,0"))
             db.commit()
         
         return redirect('/')
