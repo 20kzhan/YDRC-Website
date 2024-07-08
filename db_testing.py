@@ -9,10 +9,10 @@ async def main():
             # await cursor.execute("CREATE TABLE students (student_id TEXT PRIMARY KEY, student_name TEXT, student_email TEXT, student_dob TEXT, parent_wechat TEXT, parent_email TEXT, class_id INTEGER)")
             # await cursor.execute("CREATE TABLE admins (admin_id TEXT PRIMARY KEY, admin_name TEXT, admin_email TEXT)")
             # await cursor.execute("DROP TABLE classes")
-            await cursor.execute("DELETE FROM students") 
-            await cursor.execute("DELETE FROM classes")
-            await cursor.execute("DELETE FROM teachers")
-            await cursor.execute("DELETE FROM admins")
+            # await cursor.execute("DELETE FROM students") 
+            # await cursor.execute("DELETE FROM classes")
+            # await cursor.execute("DELETE FROM teachers")
+            # await cursor.execute("DELETE FROM admins")
             # await cursor.execute("INSERT INTO admins SELECT student_id, student_name, student_email FROM students WHERE student_id = 'auth0|6589f965ccba5f154af07083'")
             # await cursor.execute("ALTER TABLE admins ADD COLUMN active INTEGER")
             # await cursor.execute("UPDATE teachers SET teacher_classes = ? WHERE teacher_id = ?", ('7148176391558983680,0,0,0,0', 'auth0|6594e901dca1222f3d0bc536'))
@@ -26,6 +26,8 @@ async def main():
             # await cursor.execute("INSERT INTO classes (class_id, teacher_id, class_name, teacher_intro, class_schedule, class_description, class_plan, class_requirements, other_notes, students) SELECT class_id, teacher_id, class_name, teacher_intro, class_schedule, class_description, class_plan, class_requirements, other_notes, json('{}') FROM classes_old")
             # await cursor.execute("DROP TABLE classes_old")
             # await cursor.execute("DELETE FROM students")
+
+            await cursor.execute("CREATE TABLE teacher_temp (teacher_id TEXT PRIMARY KEY, teacher_name TEXT, teacher_email TEXT)")
 
             await conn.commit()
 

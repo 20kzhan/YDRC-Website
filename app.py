@@ -102,6 +102,8 @@ def first_time(email):
     finally:
         conn.close()
     
+    print(result)
+    
     if result:
         return result[0]
     else:
@@ -143,6 +145,13 @@ def is_teacher_registered(sub):
 
 def get_user(sub):
     if sub in user_cache:
+        try:
+            user_cache[sub]['app_metadata']['account_type']
+        except KeyError:
+            logging.warning(f"User {sub} found in cache but has no account type")
+            del user_cache[sub]
+            set_app_metadata(sub, {'account_type': 'student'})
+            return get_user(sub)
         logging.info(f"User {sub} found in cache")
         return user_cache[sub]
     
@@ -164,6 +173,13 @@ def get_user(sub):
     response.raise_for_status()
 
     user = response.json()
+
+    try:
+        user['app_metadata']['account_type']
+    except KeyError:
+        logging.warning(f"User {sub} fetched from Auth0 has no account type")
+        user['app_metadata'] = {'account_type': 'student'}
+        set_app_metadata(sub, {'account_type': 'student'})
 
     user_cache[sub] = user
 
@@ -267,6 +283,36 @@ def home_page():
         print("no auth0 user found")
         return redirect(url_for('login_page'))
 
+@app.route('/onboarding')
+def register():
+    if not session.get('user'):
+        return redirect('/login')
+
+    if first_time(session.get('user')['userinfo']['email']) != None:
+        return redirect('/')
+    
+    return render_template('onboarding.html')
+
+@app.route('/student/onboarding')
+def student_onboarding():
+    return redirect('/')
+
+@app.route('/teacher/onboarding')
+def teacher_onboarding():
+    with sqlite3.connect("YDRC.db") as db:
+        cursor = db.cursor()
+        cursor.execute("SELECT * FROM teacher_temp WHERE teacher_id = ?", (session.get('user')['userinfo']['sub'],))
+        result = cursor.fetchone()
+        if result == None:
+            cursor.execute("INSERT INTO teacher_temp VALUES (?, ?, ?)", (session.get('user')['userinfo']['sub'], session.get('user')['userinfo']['name'], session.get('user')['userinfo']['email']))
+
+    sub = session['user']['userinfo']['sub']
+    if get_user(sub)['app_metadata']['account_type'] != 'student':
+        return redirect(f'/{get_user(sub)["app_metadata"]["account_type"]}')
+    
+    email = get_user(sub)['email']
+    return render_template('teacher_onboarding.html', email=email)
+
 @app.route("/callback", methods=["GET", "POST"])
 def callback():
     try:
@@ -277,7 +323,11 @@ def callback():
         return render_template("email_verification.html", home_page_url=url_for("home_page", _external=True))
     session["user"] = token
 
-    return redirect(url_for("home_page"))
+    if get_user(session['user']['userinfo']['sub'])['app_metadata']['account_type'] != 'student':
+        return redirect('/')
+    if first_time(session.get('user')['userinfo']['email']) != None:
+        return redirect('/')
+    return redirect(url_for("register"))
 
 @app.route("/login")
 def login_page():
@@ -681,6 +731,8 @@ def admin():
         admins = cursor.fetchall()
         cursor.execute('SELECT * FROM classes')
         classes = cursor.fetchall()
+        cursor.execute('SELECT * FROM teacher_temp')
+        teacher_temp = cursor.fetchall()
     finally:
         cursor.close()
         conn.close()
@@ -702,7 +754,27 @@ def admin():
                            students=students,
                            teachers=teachers,
                            admins=admins,
-                           classes=classes)
+                           classes=classes,
+                           teacher_temp=teacher_temp)
+
+@app.route('/delete_teacher', methods=['POST'])
+def delete_teacher():
+    if request.method == "POST":
+        print(request.form)
+        if not session.get('user'):
+            return jsonify(success=False, message="You are not logged in.")
+
+        if get_user(session.get('user')['userinfo']['sub'])['app_metadata']['account_type'] != 'admin':
+            return jsonify(success=False, message="You do not have permission to do this."), 401
+        
+        sub = request.form['teacher_id']
+
+        with sqlite3.connect("YDRC.db") as db:
+            cursor = db.cursor()
+            cursor.execute("DELETE FROM teacher_temp WHERE teacher_id = ?", (sub,))
+            db.commit()
+        
+        return jsonify(success=True, message="Teacher deleted successfully.")
 
 @app.route('/admin_submit', methods=['POST'])
 def admin_submit():

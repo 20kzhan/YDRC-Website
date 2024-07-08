@@ -23,6 +23,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 
     <link href="https://fonts.cdnfonts.com/css/gg-sans-2" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/fonts.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/admin.css') }}">
@@ -138,6 +139,30 @@
                     });
                 }
             </script>
+
+            <h1>Teacher Requests Awaiting Approval</h1>
+            <table id="teacher-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>teacher_id</th>
+                        <th>teacher_name</th>
+                        <th>teacher_email</th>
+                        <th>Action</th> <!-- New column for the action -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in teacher_temp %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ entry[0] }}</td>
+                        <td>{{ entry[1] }}</td>
+                        <td>{{ entry[2] }}</td>
+                        <td><button class="delete-btn" onclick="deleteEntry('{{ entry[0] }}')"><i class="fas fa-trash-alt"></i></button></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
 
             <h1>Students</h1>
             <table>
@@ -279,6 +304,8 @@
                     {% endfor %}
                 </tbody>
             </table>
+
+            <script src="{{ url_for('static', filename='js/delete_entry.js') }}"></script>
         </div>
     </div>
 </body>

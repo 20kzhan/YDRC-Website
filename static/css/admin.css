@@ -105,3 +105,31 @@ th:hover .tooltip-text {
     visibility: visible;
     opacity: 1;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.delete-btn {
+    display: none;
+    cursor: pointer;
+    color: red;
+    background: transparent;
+    border: none;
+    font-size: 0.95em; /* Adjust the font size */
+}
+
+tr:hover .delete-btn {
+    display: inline;
+}
+
+.delete-btn .fa-trash-alt {
+    font-size: 0.9em; /* Adjust the icon size */
+}

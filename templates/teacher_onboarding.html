@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Onboarding</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+  <link href="https://fonts.cdnfonts.com/css/gg-sans-2" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/fonts.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}">
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/onboarding.css') }}">
+</head>
+
+<body>
+    <nav>
+        <div class="nav-container">
+          <section>Welcome!</section>
+          <ul>
+            {% if registered %}
+            <li><a href="/teacher/create_class">Create a Class</a></li>
+            {% endif %}
+    
+            <li><a href="/logout">Logout</a></li>
+          </ul>
+        </div>
+      </nav>
+
+    <div class="center">
+        <section style="font-size: 30px;">Email: {{ email }}</section>
+
+        <div class="button-container">
+            <form id="refreshForm" action="/refresh_account_type" method="post">
+                <input type="submit" id="refreshButton" class="nav-button" value="Refresh Account Type"><br>
+            </form>
+
+            <a href="/onboarding" class="button small">Back</a>
+    
+            <script src="{{ url_for('static', filename='js/refresh_cooldown.js') }}"></script>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/onboarding.js') }}"></script>
+</body>
