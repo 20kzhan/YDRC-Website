@@ -51,12 +51,16 @@
             <p class="parent-email"><a href="mailto:{{ student[5] }}">{{ student[5] }}</a></p>
             <p class="parent-wechat">Parent Wechat: {{ student[4] }}</p>
 
+            {% if approved == 'pending_deletion' %}
+            <h1 class="student-status">Status: Pending Unenrollment</h1>
+            {% elif approved == 'pending' %}
+
             <!-- two buttons that send post requests to "approve_enrollment" and "deny_enrollment" with the enrollment_id in the hidden form -->
-            <form id="refreshForm" action="/approve_enrollment" method="post">
+            <form id="refreshForm" action="{{ /approve_enrollment if approved == 'pending' else /approve_unenrollment }}" method="post">
                 <input type="hidden" name="enrollment_id" value="{{ enrollment_id }}">
                 <input type="submit" id="approveButton" class="nav-button enroll-button no-margin-button" value="Approve">
             </form>
-            <form id="refreshForm" action="/deny_enrollment" method="post">
+            <form id="refreshForm" action="{{ /deny_enrollment if approved == 'pending' else /deny_unenrollment }}" method="post">
                 <input type="hidden" name="enrollment_id" value="{{ enrollment_id }}">
                 <input type="submit" id="denyButton" class="nav-button unenroll-button no-margin-button" value="Deny">
             </form>

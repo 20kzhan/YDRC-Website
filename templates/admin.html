@@ -197,6 +197,32 @@
             {% else %}
             <p>No class requests awaiting approval.</p>
             {% endif %}
+            
+            <h1>Unenrollment Requests</h1>
+            {% if pending_unenrollments %}
+            <table id="unenrollment-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>unenrollment_id</th>
+                        <th>student_id</th>
+                        <th>class_id</th>
+                        <th>points</th>
+                        <th>approved</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in pending_unenrollments %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td><a href="/enrollment/{{ entry[0] }}">{{ entry[0] }}</a></td>
+                        <td>{{ entry[1] }}</td>
+                        <td>{{ entry[2] }}</td>
+                        <td>{{ entry[3] }}</td>
+                        <td>{{ entry[4] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
 
             <h1>Students</h1>
             <table>

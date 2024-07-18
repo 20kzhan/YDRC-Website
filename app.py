@@ -801,6 +801,33 @@ def deny_enrollment():
         
         return redirect('/admin')
 
+@app.route('/unenroll_student', methods=['POST'])
+def unenroll_student():
+    if request.method == "POST":
+        with sqlite3.connect("YDRC.db") as db:
+            cursor = db.cursor()
+            cursor.execute("UPDATE enrollments SET approved = ? WHERE student_id = ? AND class_id = ?", ('pending_deletion', request.form['sub'], request.form['class_id']))
+        
+        return redirect('/')
+
+@app.route('/approve_unenrollment', methods=['POST'])
+def approve_unenrollment():
+    if request.method == "POST":
+        with sqlite3.connect("YDRC.db") as db:
+            cursor = db.cursor()
+            cursor.execute("DELETE FROM enrollments WHERE student_id = ? AND class_id = ?", (request.form['sub'], request.form['class_id']))
+            cursor.execute("SELECT class_id FROM students WHERE student_id = ?", (request.form['sub'],))
+            result = cursor.fetchone()
+            if result[0]:
+                print(result)
+                result = list(map(int, result[0].split(",")))
+
+                result[result.index(int(request.form['class_id']))] = 0
+                cursor.execute("UPDATE students SET class_id = ? WHERE student_id = ?", (",".join(map(str, result)), request.form['sub']))
+            db.commit()
+        
+        return redirect('/admin')
+
 @app.route('/teacher_submit', methods=['POST'])
 def teacher_submit():
     if request.method == "POST":
