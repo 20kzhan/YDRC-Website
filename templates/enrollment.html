@@ -53,7 +53,7 @@
 
             {% if approved == 'pending_deletion' %}
             <h1 class="student-status">Status: Pending Unenrollment</h1>
-            {% elif approved == 'pending' %}
+            {% endif %}
 
             <!-- two buttons that send post requests to "approve_enrollment" and "deny_enrollment" with the enrollment_id in the hidden form -->
             <form id="refreshForm" action="{{ /approve_enrollment if approved == 'pending' else /approve_unenrollment }}" method="post">
