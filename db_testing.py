@@ -35,6 +35,7 @@ async def main():
 
             # await cursor.execute("ALTER TABLE enrollements ADD COLUMN approved TEXT")
             await cursor.execute("ALTER TABLE enrollements RENAME TO enrollments")
+            await cursor.execute("DROP TABLE enrollements")
 
             await conn.commit()
 
