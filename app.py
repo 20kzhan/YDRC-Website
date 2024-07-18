@@ -546,7 +546,65 @@ def class_page(class_id):
                                class_requirements=result[7],
                                other_notes=result[8],
                                students=students)
-                               
+
+@app.route('/class/<int:class_id>/add_points/<int:student_id>', methods=['POST'])
+def add_points(class_id, student_id):
+    if not session.get('user'):
+        return redirect('/login')
+    if get_user(session['user']['userinfo']['sub'])["app_metadata"]["account_type"] != 'teacher':
+        flash(f'Teacher? Contact the person who gave you this link with your Account ID below.')
+        return redirect('/')
+
+    if request.method == "POST":
+        with sqlite3.connect("YDRC.db") as db:
+            cursor = db.cursor()
+            cursor.execute("SELECT points FROM enrollements WHERE student_id = ? AND class_id = ?", (student_id, class_id))
+            result = cursor.fetchone()
+            cursor.execute("UPDATE enrollements SET points = ? WHERE student_id = ? AND class_id = ?", (result[0] + 10, student_id, class_id))
+            db.commit()
+    
+    return redirect(f'/class/{class_id}')
+
+@app.route('/enrollment/<int:enrollment_id>')
+def enrollment(enrollment_id):
+    if not session.get('user'):
+        return redirect('/login')
+    if get_user(session['user']['userinfo']['sub'])["app_metadata"]["account_type"] != 'admin':
+        flash(f'Teacher? Contact the person who gave you this link with your Account ID below.')
+        return redirect('/')
+
+    with sqlite3.connect("YDRC.db") as db:
+        cursor = db.cursor()
+        cursor.execute("SELECT * FROM enrollements WHERE enrollment_id = ?", (enrollment_id,))
+        enrollment = cursor.fetchone()
+        cursor.execute("SELECT * FROM students WHERE student_id = ?", (enrollment[1],))
+        student = cursor.fetchone()
+        cursor.execute("SELECT * FROM classes WHERE class_id = ?", (enrollment[2],))
+        class_ = cursor.fetchone()
+    
+    if not enrollment:
+        flash(f'Enrollment not found. Please try again.')
+        return redirect(url_for('home_page'))
+    
+    sub = session['user']['userinfo']['sub']
+    name = get_name('teacher', sub)
+    if not name:
+        try:
+            name = session['user']['userinfo']['name']
+        except KeyError:
+            name = "Guest"
+
+    return render_template('enrollment.html',
+                           name=name,
+                           sub=sub,
+                           enrollment_id=enrollment_id,
+                           student_id=enrollment[1],
+                           class_id=enrollment[2],
+                           points=enrollment[3],
+                           approved=enrollment[4],
+                           student=student,
+                           class_=class_)
+
 def teacher_owns_class(teacher_id, class_id):   
     with sqlite3.connect("YDRC.db") as db:
         cursor = db.cursor()
@@ -622,6 +680,7 @@ def can_enroll(class_id, sub):
         except ValueError:
             return False
 
+"""
 @app.route('/enroll/<int:class_id>', methods=['POST'])
 def enroll(class_id):
     if request.method == "POST":
@@ -650,7 +709,7 @@ def enroll(class_id):
             else:
                 cursor.execute("UPDATE classes SET students = ? WHERE class_id = ?", (str(sub), class_id))
             db.commit()
-            logging.info("Enrolled student " + sub + " in class " + str(class_id))
+        logging.info("Enrolled student " + sub + " in class " + str(class_id))
         
         return redirect(f'{url_for("class_page", class_id=class_id)}')
 
@@ -687,6 +746,17 @@ def unenroll(class_id):
             logging.info("Unenrolled student " + sub + " from class " + str(class_id))
         
         return redirect(f'{url_for("class_page", class_id=class_id)}')
+"""
+
+@app.route('/student_enroll', methods=['POST'])
+def student_enroll():
+    if request.method == "POST":
+        with sqlite3.connect("YDRC.db") as db:
+            cursor = db.cursor()
+            cursor.execute("INSERT INTO enrollements (student_id, class_id, points, approved) VALUES (?, ?, ?, ?)", (request.form['sub'], request.form['class_id'], 0, 'pending'))
+            db.commit()
+    
+    return jsonify(success=True)
 
 @app.route('/teacher_submit', methods=['POST'])
 def teacher_submit():
@@ -733,6 +803,10 @@ def admin():
         classes = cursor.fetchall()
         cursor.execute('SELECT * FROM teacher_temp')
         teacher_temp = cursor.fetchall()
+        cursor.execute('SELECT * FROM enrollements')
+        enrollements = cursor.fetchall()
+        cursor.execute('SELECT * FROM enrollments WHERE approved = ?', ('pending',))
+        pending_enrollements = cursor.fetchall()
     finally:
         cursor.close()
         conn.close()
@@ -755,7 +829,9 @@ def admin():
                            teachers=teachers,
                            admins=admins,
                            classes=classes,
-                           teacher_temp=teacher_temp)
+                           enrollements=enrollements,
+                           teacher_temp=teacher_temp,
+                           pending_enrollements=pending_enrollements)
 
 @app.route('/delete_teacher', methods=['POST'])
 def delete_teacher():
