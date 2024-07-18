@@ -59,11 +59,13 @@
             <form id="refreshForm" action="{{ '/approve_enrollment' if approved == 'pending' else '/approve_unenrollment' }}" method="post">
                 <input type="hidden" name="enrollment_id" value="{{ enrollment_id }}">
                 <input type="hidden" name="sub" value="{{ student[0] }}">
+                <input type="hidden" name="class_id" value="{{ class_[0] }}">
                 <input type="submit" id="approveButton" class="nav-button enroll-button no-margin-button" value="Approve">
             </form>
             <form id="refreshForm" action="{{ '/deny_enrollment' if approved == 'pending' else '/deny_unenrollment' }}" method="post">
                 <input type="hidden" name="enrollment_id" value="{{ enrollment_id }}">
                 <input type="hidden" name="sub" value="{{ student[0] }}">
+                <input type="hidden" name="class_id" value="{{ class_[0] }}">
                 <input type="submit" id="denyButton" class="nav-button unenroll-button no-margin-button" value="Deny">
             </form>
         </div>
