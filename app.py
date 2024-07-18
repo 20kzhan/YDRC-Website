@@ -774,6 +774,14 @@ def approve_enrollment():
             cursor.execute("UPDATE enrollments SET approved = ? WHERE enrollment_id = ?", ('approved', request.form['enrollment_id']))
             db.commit()
 
+@app.route('/deny_enrollment', methods=['POST'])
+def deny_enrollment():
+    if request.method == "POST":
+        with sqlite3.connect("YDRC.db") as db:
+            cursor = db.cursor()
+            cursor.execute("DELETE FROM enrollments WHERE enrollment_id = ?", (request.form['enrollment_id'],))
+            db.commit()
+
 @app.route('/teacher_submit', methods=['POST'])
 def teacher_submit():
     if request.method == "POST":

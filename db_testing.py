@@ -34,7 +34,9 @@ async def main():
             # await cursor.execute("CREATE TABLE enrollments (enrollment_id INTEGER PRIMARY KEY, student_id TEXT, class_id INTEGER, points INTEGER, FOREIGN KEY (student_id) REFERENCES students (student_id), FOREIGN KEY (class_id) REFERENCES classes (class_id))")
 
             # await cursor.execute("ALTER TABLE enrollments ADD COLUMN approved TEXT")
-            await cursor.execute("ALTER TABLE enrollments RENAME TO enrollments")
+            # await cursor.execute("ALTER TABLE enrollments RENAME TO enrollments")
+
+            await cursor.execute("UPDATE students SET class_id = ? WHERE student_id = ?", ('0,0,0,0,0', 'google-oauth2|116934202470070773192'))
 
             await conn.commit()
 
