@@ -34,6 +34,10 @@
             <p><strong>Class Plan:</strong> {{ class_plan }}</p>
             <p><strong>Requirements:</strong> {{ class_requirements }}</p>
             <p>{{ 'Additional Notes: ' + other_notes if other_notes else '' }}</p>
+            
+            {% if status != 'approved' and status %}
+            <h1 class="student-status">Status: {{ status }}</h1>
+            {% endif %}
 
             {% if not enrolled %}
             <form id="refreshForm" action="/student_enroll" method="post">

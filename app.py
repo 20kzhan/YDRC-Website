@@ -487,9 +487,20 @@ def class_page(class_id):
                 name = session['user']['userinfo']['name']
             except KeyError:
                 name = "Guest"
+        
+        with sqlite3.connect("YDRC.db") as db:
+            cursor = db.cursor()
+            cursor.execute("SELECT approved FROM enrollments WHERE student_id = ? AND class_id = ?", (sub, class_id))
+            status = cursor.fetchone()
+        
+        if status:
+            status = status[0]
+        else:
+            status = False
 
         return render_template(f'class_student.html',
                             enrolled=already_enrolled(class_id, sub),
+                            status=status,
                             can_enroll=can_enroll(class_id, sub),
                             name=name,
                             sub=sub,
