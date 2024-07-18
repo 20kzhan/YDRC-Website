@@ -660,7 +660,7 @@ def edit_class():
 def already_enrolled(class_id, sub):
     with sqlite3.connect("YDRC.db") as db:
         cursor = db.cursor()
-        cursor.execute("SELECT class_id FROM students WHERE student_id = ?", (sub,))
+        cursor.execute("SELECT * FROM enrollments WHERE student_id = ? AND class_id = ?", (sub, class_id))
         result = cursor.fetchone()
         if not result:
             return False
@@ -777,6 +777,28 @@ def approve_enrollment():
         with sqlite3.connect("YDRC.db") as db:
             cursor = db.cursor()
             cursor.execute("UPDATE enrollments SET approved = ? WHERE enrollment_id = ?", ('approved', request.form['enrollment_id']))
+
+            cursor.execute("SELECT student_id, class_id FROM enrollments WHERE enrollment_id = ?", (request.form['enrollment_id'],))
+            result = cursor.fetchone()
+            sub = result[0]
+            class_id = result[1]
+            cursor.execute("SELECT class_id FROM students WHERE student_id = ?", (sub,))
+            result = cursor.fetchone()
+            if result[0]:
+                print(result)
+                result = list(map(int, result[0].split(",")))
+                result[result.index(0)] = class_id
+                cursor.execute("UPDATE students SET class_id = ? WHERE student_id = ?", (",".join(map(str, result)), sub))
+            else:
+                cursor.execute("UPDATE students SET class_id = ? WHERE student_id = ?", (str(class_id), sub))
+            cursor.execute("SELECT students FROM classes WHERE class_id = ?", (class_id,))
+            students = cursor.fetchone()
+            if students[0]:
+                print(students)
+                students = list(map(int, students[0].split(",")))
+                cursor.execute("UPDATE classes SET students = ? WHERE class_id = ?", (",".join(map(str, students)), class_id))
+            else:
+                cursor.execute("UPDATE classes SET students = ? WHERE class_id = ?", (str(sub), class_id))
             db.commit()
         
         return redirect('/admin')
