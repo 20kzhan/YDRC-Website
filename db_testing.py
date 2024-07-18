@@ -31,9 +31,10 @@ async def main():
 
             # await cursor.execute("CREATE TABLE teacher_temp (teacher_id TEXT PRIMARY KEY, teacher_name TEXT, teacher_email TEXT)")
 
-            await cursor.execute("CREATE TABLE enrollements (enrollment_id INTEGER PRIMARY KEY, student_id TEXT, class_id INTEGER, points INTEGER, FOREIGN KEY (student_id) REFERENCES students (student_id), FOREIGN KEY (class_id) REFERENCES classes (class_id))")
+            # await cursor.execute("CREATE TABLE enrollements (enrollment_id INTEGER PRIMARY KEY, student_id TEXT, class_id INTEGER, points INTEGER, FOREIGN KEY (student_id) REFERENCES students (student_id), FOREIGN KEY (class_id) REFERENCES classes (class_id))")
 
-            await cursor.execute("ALTER TABLE enrollements ADD COLUMN approved TEXT")
+            # await cursor.execute("ALTER TABLE enrollements ADD COLUMN approved TEXT")
+            await cursor.execute("ALTER TABLE enrollements RENAME TO enrollments")
 
             await conn.commit()
 
