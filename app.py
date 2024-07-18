@@ -787,14 +787,6 @@ def approve_enrollment():
                 cursor.execute("UPDATE students SET class_id = ? WHERE student_id = ?", (",".join(map(str, result)), sub))
             else:
                 cursor.execute("UPDATE students SET class_id = ? WHERE student_id = ?", (str(class_id), sub))
-            cursor.execute("SELECT students FROM classes WHERE class_id = ?", (class_id,))
-            students = cursor.fetchone()
-            if students[0]:
-                print(students)
-                students = list(map(int, students[0].split(",")))
-                cursor.execute("UPDATE classes SET students = ? WHERE class_id = ?", (",".join(map(str, students)), class_id))
-            else:
-                cursor.execute("UPDATE classes SET students = ? WHERE class_id = ?", (str(sub), class_id))
             db.commit()
         
         return redirect('/admin')
