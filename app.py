@@ -83,7 +83,7 @@ def get_student_classes(student_id):
             return None
         
         # Sqlite3 sees the question marks as variables, not empty values
-        placeholders = ', '.join('?' for _ in student_class_ids)
+        placeholders = ', '.join('?' for _ in student_class_ids.split(","))
 
         query = f'SELECT * FROM classes WHERE class_id IN ({placeholders})'
         cursor.execute(query, student_class_ids)
