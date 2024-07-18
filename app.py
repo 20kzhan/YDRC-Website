@@ -753,10 +753,26 @@ def student_enroll():
     if request.method == "POST":
         with sqlite3.connect("YDRC.db") as db:
             cursor = db.cursor()
-            cursor.execute("INSERT INTO enrollments (student_id, class_id, points, approved) VALUES (?, ?, ?, ?)", (request.form['sub'], request.form['class_id'], 0, 'pending'))
+            cursor.execute("INSERT INTO enrollments (enrollment_id, student_id, class_id, points, approved) VALUES (?, ?, ?, ?, ?)", (next(id_gen), request.form['sub'], request.form['class_id'], 0, 'pending'))
             db.commit()
     
     return jsonify(success=True)
+
+@app.route('/student_unenroll', methods=['POST'])
+def student_unenroll():
+    if request.method == "POST":
+        with sqlite3.connect("YDRC.db") as db:
+            cursor = db.cursor()
+            cursor.execute("UPDATE enrollments SET approved = ? WHERE student_id = ? AND class_id = ?", ('pending_deletion', request.form['sub'], request.form['class_id']))
+            db.commit()
+
+@app.route('/approve_enrollment', methods=['POST'])
+def approve_enrollment():
+    if request.method == "POST":
+        with sqlite3.connect("YDRC.db") as db:
+            cursor = db.cursor()
+            cursor.execute("UPDATE enrollments SET approved = ? WHERE enrollment_id = ?", ('approved', request.form['enrollment_id']))
+            db.commit()
 
 @app.route('/teacher_submit', methods=['POST'])
 def teacher_submit():
