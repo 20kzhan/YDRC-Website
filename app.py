@@ -914,7 +914,7 @@ def admin():
                            enrollments=enrollments,
                            teacher_temp=teacher_temp,
                            pending_enrollments=pending_enrollments,
-                           pending_deletions=pending_unenrollments,)
+                           pending_unenrollments=pending_unenrollments,)
 
 @app.route('/delete_teacher', methods=['POST'])
 def delete_teacher():
