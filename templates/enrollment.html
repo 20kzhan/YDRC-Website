@@ -42,9 +42,8 @@
             {% endif %}
             {% endwith %}
 
-            <h1 class="class-title">{{ class_name }}</h1>
-            <h3 class="teacher-name">{{ teacher_name }}</h3>
-            <p class="teacher-intro">{{ teacher_intro }}</p>
+            <h1 class="class-title">{{ class_[0] }}</h1>
+            <h3 class="teacher-name">{{ teacher[1] }}</h3>
             <p class="class-description">{{ class_description }}</p>
             <h1 class="student-name">Student Name: {{ student[1] }}</h1>
             <p class="student-email">Email: <a href="mailto:{{ student[2] }}">{{ student[2] }}</a></p>

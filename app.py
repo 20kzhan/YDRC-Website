@@ -581,6 +581,8 @@ def enrollment(enrollment_id):
         student = cursor.fetchone()
         cursor.execute("SELECT * FROM classes WHERE class_id = ?", (enrollment[2],))
         class_ = cursor.fetchone()
+        cursor.execute("SELECT * FROM teachers WHERE teacher_id = ?", (class_[1],))
+        teacher = cursor.fetchone()
     
     if not enrollment:
         flash(f'Enrollment not found. Please try again.')
@@ -603,7 +605,8 @@ def enrollment(enrollment_id):
                            points=enrollment[3],
                            approved=enrollment[4],
                            student=student,
-                           class_=class_)
+                           class_=class_,
+                           teacher=teacher)
 
 def teacher_owns_class(teacher_id, class_id):   
     with sqlite3.connect("YDRC.db") as db:
