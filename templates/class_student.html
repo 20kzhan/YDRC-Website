@@ -42,8 +42,9 @@
                 <input type="submit" id="enrollButton" class="nav-button enroll-button no-margin-button" value="Enroll" {{ "" if can_enroll else "disabled" }}><br>
             </form>
             {% else %}
-            <form id="refreshForm" action="/unenroll/{{ class_id }}" method="post">
+            <form id="refreshForm" action="/unenroll_student}" method="post">
                 <input type="hidden" name="sub" value="{{ sub }}">
+                <input type="hidden" name="class_id" value="{{ class_id }}">
                 <input type="submit" id="unenrollButton" class="nav-button unenroll-button no-margin-button" value="Unenroll"><br>
             </form>
             {% endif %}

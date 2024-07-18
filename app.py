@@ -828,6 +828,16 @@ def approve_unenrollment():
         
         return redirect('/admin')
 
+@app.route('/deny_unenrollment', methods=['POST'])
+def deny_unenrollment():
+    if request.method == "POST":
+        with sqlite3.connect("YDRC.db") as db:
+            cursor = db.cursor()
+            cursor.execute("UPDATE enrollments SET approved = ? WHERE student_id = ? AND class_id = ?", ('approved', request.form['sub'], request.form['class_id']))
+            db.commit()
+        
+        return redirect('/admin')
+
 @app.route('/teacher_submit', methods=['POST'])
 def teacher_submit():
     if request.method == "POST":
