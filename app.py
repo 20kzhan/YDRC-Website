@@ -768,6 +768,8 @@ def student_unenroll():
             cursor = db.cursor()
             cursor.execute("UPDATE enrollments SET approved = ? WHERE student_id = ? AND class_id = ?", ('pending_deletion', request.form['sub'], request.form['class_id']))
             db.commit()
+        
+        return jsonify(success=True)
 
 @app.route('/approve_enrollment', methods=['POST'])
 def approve_enrollment():
@@ -776,6 +778,8 @@ def approve_enrollment():
             cursor = db.cursor()
             cursor.execute("UPDATE enrollments SET approved = ? WHERE enrollment_id = ?", ('approved', request.form['enrollment_id']))
             db.commit()
+        
+        return redirect('/admin')
 
 @app.route('/deny_enrollment', methods=['POST'])
 def deny_enrollment():
@@ -784,6 +788,8 @@ def deny_enrollment():
             cursor = db.cursor()
             cursor.execute("DELETE FROM enrollments WHERE enrollment_id = ?", (request.form['enrollment_id'],))
             db.commit()
+        
+        return redirect('/admin')
 
 @app.route('/teacher_submit', methods=['POST'])
 def teacher_submit():
