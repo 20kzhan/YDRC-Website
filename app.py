@@ -665,11 +665,7 @@ def already_enrolled(class_id, sub):
         if not result:
             return False
 
-        result = list(map(int, result[0].split(",")))
-        if class_id in result:
-            return True
-        else:
-            return False
+        return True
 
 def can_enroll(class_id, sub):
     with sqlite3.connect("YDRC.db") as db:
