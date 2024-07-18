@@ -887,6 +887,8 @@ def admin():
         enrollments = cursor.fetchall()
         cursor.execute('SELECT * FROM enrollments WHERE approved = ?', ('pending',))
         pending_enrollments = cursor.fetchall()
+        cursor.execute('SELECT * FROM enrollments WHERE approved = ?', ('pending_deletion',))
+        pending_unenrollments = cursor.fetchall()
     finally:
         cursor.close()
         conn.close()
@@ -911,7 +913,8 @@ def admin():
                            classes=classes,
                            enrollments=enrollments,
                            teacher_temp=teacher_temp,
-                           pending_enrollments=pending_enrollments)
+                           pending_enrollments=pending_enrollments,
+                           pending_deletions=pending_unenrollments,)
 
 @app.route('/delete_teacher', methods=['POST'])
 def delete_teacher():
