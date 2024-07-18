@@ -60,7 +60,7 @@
                 <input type="hidden" name="enrollment_id" value="{{ enrollment_id }}">
                 <input type="submit" id="approveButton" class="nav-button enroll-button no-margin-button" value="Approve">
             </form>
-            <form id="refreshForm" action="{{ /deny_enrollment if approved == 'pending' else /deny_unenrollment }}" method="post">
+            <form id="refreshForm" action="{{ '/deny_enrollment' if approved == 'pending' else '/deny_unenrollment' }}" method="post">
                 <input type="hidden" name="enrollment_id" value="{{ enrollment_id }}">
                 <input type="submit" id="denyButton" class="nav-button unenroll-button no-margin-button" value="Deny">
             </form>
