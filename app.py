@@ -558,9 +558,9 @@ def add_points(class_id, student_id):
     if request.method == "POST":
         with sqlite3.connect("YDRC.db") as db:
             cursor = db.cursor()
-            cursor.execute("SELECT points FROM enrollements WHERE student_id = ? AND class_id = ?", (student_id, class_id))
+            cursor.execute("SELECT points FROM enrollments WHERE student_id = ? AND class_id = ?", (student_id, class_id))
             result = cursor.fetchone()
-            cursor.execute("UPDATE enrollements SET points = ? WHERE student_id = ? AND class_id = ?", (result[0] + 10, student_id, class_id))
+            cursor.execute("UPDATE enrollments SET points = ? WHERE student_id = ? AND class_id = ?", (result[0] + 10, student_id, class_id))
             db.commit()
     
     return redirect(f'/class/{class_id}')
@@ -575,7 +575,7 @@ def enrollment(enrollment_id):
 
     with sqlite3.connect("YDRC.db") as db:
         cursor = db.cursor()
-        cursor.execute("SELECT * FROM enrollements WHERE enrollment_id = ?", (enrollment_id,))
+        cursor.execute("SELECT * FROM enrollments WHERE enrollment_id = ?", (enrollment_id,))
         enrollment = cursor.fetchone()
         cursor.execute("SELECT * FROM students WHERE student_id = ?", (enrollment[1],))
         student = cursor.fetchone()
@@ -753,7 +753,7 @@ def student_enroll():
     if request.method == "POST":
         with sqlite3.connect("YDRC.db") as db:
             cursor = db.cursor()
-            cursor.execute("INSERT INTO enrollements (student_id, class_id, points, approved) VALUES (?, ?, ?, ?)", (request.form['sub'], request.form['class_id'], 0, 'pending'))
+            cursor.execute("INSERT INTO enrollments (student_id, class_id, points, approved) VALUES (?, ?, ?, ?)", (request.form['sub'], request.form['class_id'], 0, 'pending'))
             db.commit()
     
     return jsonify(success=True)
@@ -803,10 +803,10 @@ def admin():
         classes = cursor.fetchall()
         cursor.execute('SELECT * FROM teacher_temp')
         teacher_temp = cursor.fetchall()
-        cursor.execute('SELECT * FROM enrollements')
-        enrollements = cursor.fetchall()
+        cursor.execute('SELECT * FROM enrollments')
+        enrollments = cursor.fetchall()
         cursor.execute('SELECT * FROM enrollments WHERE approved = ?', ('pending',))
-        pending_enrollements = cursor.fetchall()
+        pending_enrollments = cursor.fetchall()
     finally:
         cursor.close()
         conn.close()
@@ -829,9 +829,9 @@ def admin():
                            teachers=teachers,
                            admins=admins,
                            classes=classes,
-                           enrollements=enrollements,
+                           enrollments=enrollments,
                            teacher_temp=teacher_temp,
-                           pending_enrollements=pending_enrollements)
+                           pending_enrollments=pending_enrollments)
 
 @app.route('/delete_teacher', methods=['POST'])
 def delete_teacher():
