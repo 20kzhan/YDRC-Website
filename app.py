@@ -569,7 +569,7 @@ def class_page(class_id):
         with sqlite3.connect("YDRC.db") as db:
             cursor = db.cursor()
 
-            cursor.execute("SELECT student_id FROM enrollments WHERE class_id = ?, approved = ?", (class_id,"approved",))
+            cursor.execute("SELECT student_id FROM enrollments WHERE class_id = ? AND approved = ?", (class_id,"approved",))
             students = cursor.fetchall()
 
             if students:
