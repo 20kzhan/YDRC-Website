@@ -228,6 +228,32 @@
             <p>No unenrollment requests awaiting approval.</p>
             {% endif %}
 
+            <h1>Enrollments</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>enrollment_id</th>
+                        <th>student_id</th>
+                        <th>class_id</th>
+                        <th>points</th>
+                        <th>approved</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for entry in enrollments %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ entry[0] }}</td>
+                        <td>{{ entry[1] }}</td>
+                        <td>{{ entry[2] }}</td>
+                        <td>{{ entry[3] }}</td>
+                        <td>{{ entry[4] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
             <h1>Students</h1>
             <table>
                 <thead>
