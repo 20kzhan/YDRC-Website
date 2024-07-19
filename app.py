@@ -572,9 +572,11 @@ def class_page(class_id):
             cursor.execute("SELECT student_id FROM enrollments WHERE class_id = ? AND approved = ?", (class_id,"approved",))
             students = cursor.fetchall()
 
-            if students:
-                cursor.execute("SELECT * FROM students WHERE student_id IN (?)", (",".join(map(str, students)),))
-                students = cursor.fetchall()
+            student_ids = [student[0] for student in students]
+
+            placeholders = ', '.join('?' for _ in student_ids)
+            cursor.execute(f"SELECT * FROM students WHERE student_id IN ({placeholders})", student_ids)
+            students = cursor.fetchall()
         
         return render_template(f'class_teacher.html',
                                class_owner=(True if get_user(sub)["app_metadata"]["account_type"] == 'admin' 
