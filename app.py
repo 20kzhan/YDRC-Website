@@ -569,15 +569,12 @@ def class_page(class_id):
         with sqlite3.connect("YDRC.db") as db:
             cursor = db.cursor()
 
-            cursor.execute("SELECT students FROM classes WHERE class_id = ?", (class_id,))
-            students = cursor.fetchone()
+            cursor.execute("SELECT student_id FROM enrollments WHERE class_id = ?, approved = ?", (class_id,"approved",))
+            students = cursor.fetchall()
 
-            if students[0]:
-                students = students[0].split(",")
+            if students:
                 cursor.execute("SELECT * FROM students WHERE student_id IN (?)", (",".join(map(str, students)),))
                 students = cursor.fetchall()
-            else:
-                students = []
         
         return render_template(f'class_teacher.html',
                                class_owner=(True if get_user(sub)["app_metadata"]["account_type"] == 'admin' 
