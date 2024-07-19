@@ -395,6 +395,41 @@ def teacher():
                            other_classes=other_classes,
                            email_verified=email_verified)
 
+@app.route('/student_switch')
+def student_switch():
+    if not session.get('user'):
+        return redirect('/login')
+    if get_user(session['user']['userinfo']['sub'])["app_metadata"]["account_type"] != 'teacher':
+        flash(f'Teacher? Contact the person who gave you this link with your Account ID below.')
+        return redirect('/')
+    
+    user = get_user(session['user']['userinfo']['sub'])
+    if user["email_verified"] == False:
+        verify_email(sub)
+        email_verified = False
+    elif user["email_verified"] == True:
+        email_verified = True
+    else:
+        email_verified = False
+        logging.warning(f"User {sub} has invalid email_verified value: {user['email_verified']}")
+
+    name = session.get('user')['userinfo']['name']
+    sub = session.get('user')['userinfo']['sub']
+    if get_name('student', sub):
+        print('student name found in db')
+        name = get_name('student', sub)
+    
+    classes = get_student_classes(sub)
+    if not classes:
+        classes = []
+    
+    return render_template('home.html',
+                            name=name,
+                            email=first_time(session.get('user')['userinfo']['email']),
+                            sub=sub,
+                            email_verified=email_verified,
+                            classes=classes)
+
 @app.route("/teacher/create_class", methods=['GET', 'POST'])
 def create_class():
     if not session.get('user'):

@@ -34,6 +34,9 @@
         <script src="{{ url_for('static', filename='js/refresh_cooldown.js') }}"></script>
         {% endif %}
 
+        <li><a href="/teacher" class="teacher-return" style="display: none;">Back to Teacher</a></li>
+        <script src="{{ url_for('static', filename='js/teacher_switch.js') }}"></script>
+
         <li><a href="/logout">Logout</a></li>
         <a href="/settings" class="settings-icon">
           <i class="fas fa-cog"></i> <!-- Font Awesome Settings Icon -->
