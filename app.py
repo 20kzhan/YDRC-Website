@@ -595,6 +595,71 @@ def class_page(class_id):
                                other_notes=result[8],
                                students=students)
 
+@app.route('/class_switch/<int:class_id>')
+def class_switch(class_id):
+    if not session.get('user'):
+        return redirect(url_for('login_page'))
+    if get_user(session['user']['userinfo']['sub'])["app_metadata"]["account_type"] != 'teacher':
+        flash(f'Teacher? Contact the person who gave you this link with your Account ID below.')
+        return redirect('/')
+    
+    if not get_user(session['user']['userinfo']['sub'])['email_verified']:
+        try:
+            del user_cache[session.get('user')['userinfo']['sub']]
+            logging.info(f"Removed user {session.get('user')['userinfo']['sub']} from cache (Refresh Account Type)")
+            get_user(session.get('user')['userinfo']['sub'])
+        except KeyError:
+            logging.warning(f"User {session.get('user')['userinfo']['sub']} not in cache (Refresh Account Type)")
+            get_user(session.get('user')['userinfo']['sub'])
+    
+    sub = session['user']['userinfo']['sub']
+
+    conn = sqlite3.connect('YDRC.db')
+    try:
+        cursor = conn.cursor()
+        cursor.execute('SELECT * FROM classes WHERE class_id = ?', (class_id,))
+        result = cursor.fetchone()
+    finally:
+        conn.close()
+    
+    if not result:
+        flash(f'Class not found. Please try again.')
+        return redirect(url_for('home_page'))
+    
+    sub = session['user']['userinfo']['sub']
+    name = get_name('student', sub)
+    if not name:
+        try:
+            name = session['user']['userinfo']['name']
+        except KeyError:
+            name = "Guest"
+    
+    with sqlite3.connect("YDRC.db") as db:
+        cursor = db.cursor()
+        cursor.execute("SELECT approved FROM enrollments WHERE student_id = ? AND class_id = ?", (sub, class_id))
+        status = cursor.fetchone()
+    
+    if status:
+        status = status[0]
+    else:
+        status = False
+
+    return render_template(f'class_student.html',
+                        enrolled=already_enrolled(class_id, sub),
+                        status=status,
+                        can_enroll=can_enroll(class_id, sub),
+                        name=name,
+                        sub=sub,
+                        class_id=class_id,
+                        class_name=result[2],
+                        teacher_name=get_name('teacher', result[1]),
+                        teacher_intro=result[3],
+                        class_schedule=result[4],
+                        class_description=result[5],
+                        class_plan=result[6],
+                        class_requirements=result[7],
+                        other_notes=result[8])
+
 @app.route('/class/<int:class_id>/add_points/<int:student_id>', methods=['POST'])
 def add_points(class_id, student_id):
     if not session.get('user'):
