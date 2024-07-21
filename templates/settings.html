@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        /* Add your styling here */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+    </style>
+
+    <title>{{ class_name }}</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/class.css') }}">
+</head>
+<body>
+    <!-- An admin exclusive page that lists all the details about a student's enrollment and shows an allow and deny button for the admin to approve or deny the enrollment. If allowed, send a post request with the enrollment_id with the status 'approved', if denied, send a post request with the enrollment_id with the status 'denied'. !--->
+    <nav>
+        <div class="nav-container">
+            <section>User Settings</section>
+            <ul>
+                <li><a href="{{ url_for('home_page') }}">Back</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="content-wrapper">
+        <div class="main-content">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <ul>
+                {% for message in messages %}
+                <h3>{{ message }}</h3>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            {% endwith %}
+
+            
+        </div>
+    </div>
+</body>
+</html>

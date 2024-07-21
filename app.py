@@ -285,6 +285,23 @@ def home_page():
         print("no auth0 user found")
         return redirect(url_for('login_page'))
 
+@app.route('/settings')
+def settings():
+    return redirect('/') # Not finished
+
+    if not session.get('user'):
+        return redirect('/login')
+    
+    sub = session['user']['userinfo']['sub']
+    if not name:
+        try:
+            name = session['user']['userinfo']['name']
+        except KeyError:
+            name = "Guest"
+    
+    return render_template('settings.html',
+                           sub=sub)
+
 @app.route('/onboarding')
 def register():
     if not session.get('user'):
