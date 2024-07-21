@@ -77,7 +77,7 @@ def get_student_classes(student_id):
     conn = sqlite3.connect('YDRC.db')
     try:   
         cursor = conn.cursor()
-        cursor.execute('SELECT class_id FROM students WHERE student_id = ?', (student_id,))
+        cursor.execute('SELECT class_id FROM enrollments WHERE student_id = ?', (student_id,))
         student_class_ids = cursor.fetchone()
         if not student_class_ids:
             return None
@@ -365,7 +365,7 @@ def teacher():
     with sqlite3.connect("YDRC.db") as db:
         cursor = db.cursor()
         cursor.execute("SELECT * FROM classes WHERE teacher_id != ?", (sub,))
-        other_classes = cursor.fetchone()
+        other_classes = cursor.fetchall()
     
     print(other_classes)
 
@@ -782,82 +782,14 @@ def already_enrolled(class_id, sub):
 def can_enroll(class_id, sub):
     with sqlite3.connect("YDRC.db") as db:
         cursor = db.cursor()
-        cursor.execute("SELECT class_id FROM students WHERE student_id = ?", (sub,))
-        result = cursor.fetchone()
-        result = list(map(int, result[0].split(",")))
-        try:
-            result.index(0)
-            return True
-        except ValueError:
+        cursor.execute("SELECT class_id FROM enrollments WHERE student_id = ?", (sub,))
+        result = cursor.fetchall()
+        
+        class_ids = [row[0] for row in result]
+        if class_id in class_ids:
             return False
-
-"""
-@app.route('/enroll/<int:class_id>', methods=['POST'])
-def enroll(class_id):
-    if request.method == "POST":
-        sub = request.form['sub']
-        if not get_name("student", sub):
-            logging.error(f"User {sub} supplied an invalid student ID to enroll in class {class_id}")
-            return jsonify(success=False, error="Either not a student account, did not enter information, or has an invalid ID"), 400
-        
-        with sqlite3.connect("YDRC.db") as db:
-            cursor = db.cursor()
-            cursor.execute("SELECT class_id FROM students WHERE student_id = ?", (sub,))
-            result = cursor.fetchone()
-            if result[0]:
-                print(result)
-                result = list(map(int, result[0].split(",")))
-                result[result.index(0)] = class_id
-                cursor.execute("UPDATE students SET class_id = ? WHERE student_id = ?", (",".join(map(str, result)), sub))
-            else:
-                cursor.execute("UPDATE students SET class_id = ? WHERE student_id = ?", (str(class_id), sub))
-            cursor.execute("SELECT students FROM classes WHERE class_id = ?", (class_id,))
-            students = cursor.fetchone()
-            if students[0]:
-                print(students)
-                students = list(map(int, students[0].split(",")))
-                cursor.execute("UPDATE classes SET students = ? WHERE class_id = ?", (",".join(map(str, students)), class_id))
-            else:
-                cursor.execute("UPDATE classes SET students = ? WHERE class_id = ?", (str(sub), class_id))
-            db.commit()
-        logging.info("Enrolled student " + sub + " in class " + str(class_id))
-        
-        return redirect(f'{url_for("class_page", class_id=class_id)}')
-
-@app.route('/unenroll/<int:class_id>', methods=['POST'])
-def unenroll(class_id):
-    if request.method == "POST":
-        sub = request.form['sub']
-        if not get_name("student", sub):
-            logging.error(f"User {sub} supplied an invalid student ID to unenroll from class {class_id}")
-            return jsonify(success=False, error="Either not a student account, did not enter information, or has an invalid ID"), 400
-        
-        with sqlite3.connect("YDRC.db") as db:
-            cursor = db.cursor()
-            cursor.execute("SELECT class_id FROM students WHERE student_id = ?", (sub,))
-            result = cursor.fetchone()
-            if result[0]:
-                print(result)
-                
-                result = list(map(int, result[0].split(",")))
-                result[result.index(class_id)] = 0
-                cursor.execute("UPDATE students SET class_id = ? WHERE student_id = ?", (",".join(map(str, result)), sub))
-            else:
-                return jsonify(success=False, error="Student not enrolled in class"), 400
-            cursor.execute("SELECT students FROM classes WHERE class_id = ?", (class_id,))
-            students = cursor.fetchone()
-            if students[0]:
-                print(students)
-                students = students[0].split(",")
-                students.remove(sub)
-                cursor.execute("UPDATE classes SET students = ? WHERE class_id = ?", (",".join(map(str, students)), class_id))
-            else:
-                return jsonify(success=False, error="Student not enrolled in class"), 400
-            db.commit()
-            logging.info("Unenrolled student " + sub + " from class " + str(class_id))
-        
-        return redirect(f'{url_for("class_page", class_id=class_id)}')
-"""
+        else:
+            return True
 
 @app.route('/student_enroll', methods=['POST'])
 def student_enroll():
@@ -890,15 +822,6 @@ def approve_enrollment():
             result = cursor.fetchone()
             sub = result[0]
             class_id = result[1]
-            cursor.execute("SELECT class_id FROM students WHERE student_id = ?", (sub,))
-            result = cursor.fetchone()
-            if result[0]:
-                print(result)
-                result = list(map(int, result[0].split(",")))
-                result[result.index(0)] = class_id
-                cursor.execute("UPDATE students SET class_id = ? WHERE student_id = ?", (",".join(map(str, result)), sub))
-            else:
-                cursor.execute("UPDATE students SET class_id = ? WHERE student_id = ?", (str(class_id), sub))
             db.commit()
         
         return redirect('/admin')
@@ -928,14 +851,6 @@ def approve_unenrollment():
         with sqlite3.connect("YDRC.db") as db:
             cursor = db.cursor()
             cursor.execute("DELETE FROM enrollments WHERE student_id = ? AND class_id = ?", (request.form['sub'], request.form['class_id']))
-            cursor.execute("SELECT class_id FROM students WHERE student_id = ?", (request.form['sub'],))
-            result = cursor.fetchone()
-            if result[0]:
-                print(result)
-                result = list(map(int, result[0].split(",")))
-
-                result[result.index(int(request.form['class_id']))] = 0
-                cursor.execute("UPDATE students SET class_id = ? WHERE student_id = ?", (",".join(map(str, result)), request.form['sub']))
             db.commit()
         
         return redirect('/admin')
@@ -1089,6 +1004,7 @@ def change_account_type():
 
             if new_type == 'teacher':
                 cursor.execute("UPDATE teachers SET teacher_classes = ? WHERE teacher_id = ?", ('0,0,0,0,0', sub))
+                cursor.execute("UPDATE teachers SET teacher_email = ? WHERE teacher_id = ?", (get_user(sub)['email'], sub))
 
             db.commit()
         
@@ -1158,7 +1074,7 @@ def student_submit():
 
         with sqlite3.connect("YDRC.db") as db:
             cursor = db.cursor()
-            cursor.execute("INSERT INTO students (student_id, student_name, student_email, student_dob, parent_wechat, parent_email, class_id) VALUES (?, ?, ?, ?, ?, ?, ?)", (student_sub, name, s_email, dob, wechat, p_email, "0,0,0,0,0"))
+            cursor.execute("INSERT INTO students (student_id, student_name, student_email, student_dob, parent_wechat, parent_email) VALUES (?, ?, ?, ?, ?, ?)", (student_sub, name, s_email, dob, wechat, p_email))
             db.commit()
         
         return redirect('/')

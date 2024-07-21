@@ -69,12 +69,17 @@
       {% for class in classes %}
       <h3><a href="/class/{{ class[0] }}">{{ class[2] }}</a>: {{ class[5] }}</h3>
       {% endfor %}
+      {% endif %}
 
-      {% elif registered and other_classes %}
+      {% if registered and other_classes %}
       <h2>Other Classes</h2>
+        {% if other_classes %}
         {% for class in other_classes %}
         <h3><a href="/class/{{ class[0] }}">{{ class[2] }}</a>: {{ class[5] }}</h3>
         {% endfor %}
+        {% else %}
+        <p>No other classes available.</p>
+        {% endif %}
       {% elif not registered %}
       <form action="/teacher_submit" method="post">
         <label for="name">Name:</label>
