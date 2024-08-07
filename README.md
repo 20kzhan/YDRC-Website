@@ -47,23 +47,6 @@ Each class, after being created by a teacher, has a class page. This page contai
 For teachers, you can edit the class if you own the class.
 ![Example Teacher Class Page](docs/teacher_class_page.png)
 
-# Example Accounts
-
-### Student Account
-
-Email: student@example.com
-Password: ydrc_US!
-
-### Teacher Account
-
-Email: teacher1@example.com
-Password: ydrc_US!
-
-### Admin Account
-
-Email: admin@example.com
-Password: ydrc_US!
-
 # "Refresh Account Type"
 
 This button at the top right of every account's page is only used for changing someone's account type. After I manually change a user's account type, they are supposed to press the button. That is why there is no explanation for the button on the website.
