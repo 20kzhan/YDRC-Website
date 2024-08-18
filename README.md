@@ -1,7 +1,27 @@
-# Teacher Guide
-Getting accepted to become a teacher can take minutes to days, depending on when you submit the request. 
+# Website IP
+http://54.176.19.164:443
 
-Once approved, you can make your own classes and see students that enroll in them.
+# Account Type Capabilities
+### Students
+- View All Classes
+- Submit enrollment/unenrollment requests
+- (planned) See misc. class data
 
-If you're a student and also a teacher, there is a "Switch to Student" button in the top right. Functionally, you have two accounts.
+### Teachers (requires approval)
+- Ability to switch to student at any time
+- Create Classes
+- Edit Class Information
+- View Class Students
+- (planned) Add points to students
 
+# To-Do List
+- [ ] Weekly backups of database (locally on server and possibly in Amazon S3)
+- [ ] Error handling!
+- [ ] Logs of database changes
+- [ ] Mobile Support (long-term)
+- [ ] Settings Menu
+- [ ] Deletion of database rows
+
+
+# Questions?
+Please make a github issue above and I will get to it shortly.
