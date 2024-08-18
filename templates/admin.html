@@ -71,7 +71,6 @@
 
             <div class="account-type-container">
                 <form action="/change_account_type" style="display: flex;" method="post">
-                    <!-- This span acts like the input now -->
                     <span id="user_id" class="acc-type-input editable-input" contenteditable="true" placeholder="User ID..."></span>
                     <input type="hidden" name="sub" id="hidden_user_id">
                     <div class="custom-select" id="customSelect">
@@ -83,7 +82,49 @@
                     <input type="hidden" name="accountType" id="hiddenInput">
                     <button type="submit" class="nav-button">Submit</button>
                 </form>
+                
+                <p id="charCount">0/50</p>
             </div>
+
+            <script>
+                const maxChars = 50;
+                const editableSpan = document.getElementById('user_id');
+                const charCount = document.getElementById('charCount');
+        
+                function updateCharCount() {
+                    const textLength = editableSpan.innerText.length;
+                    charCount.textContent = `${textLength}/${maxChars}`;
+
+                    if (maxChars - (editableSpan.innerText.length) != 0) {
+                        charCount.style = "color: white;"
+                    }
+                }
+        
+                editableSpan.addEventListener('input', function () {
+                    if (editableSpan.innerText.length > maxChars) {
+                        editableSpan.innerText = editableSpan.innerText.substring(0, maxChars);
+                        // alert("Character limit reached");
+                        charCount.style = "color: red;"
+                    }
+                    updateCharCount();
+                });
+        
+                editableSpan.addEventListener('paste', function (event) {
+                    event.preventDefault();
+                    const text = (event.clipboardData || window.clipboardData).getData('text');
+                    const currentLength = editableSpan.innerText.length;
+                    const remainingLength = maxChars - currentLength;
+                    if (text.length > remainingLength) {
+                        editableSpan.innerText += text.substring(0, remainingLength);
+                    } else {
+                        editableSpan.innerText += text;
+                    }
+                    updateCharCount();
+                });
+        
+                // Initial character count update
+                updateCharCount();
+            </script>
 
             <script src="{{ url_for('static', filename='js/account_id_input.js') }}"></script>
 
@@ -140,7 +181,7 @@
             <p>No teacher requests awaiting approval.</p>
             {% endif %}
 
-            <h1>Class Requests Awaiting Approval</h1>
+            <h1>Pending Enrollment Requests</h1>
             {% if pending_enrollments %}
             <table id="class-table">
                 <thead>
@@ -310,6 +351,7 @@
 
             <script src="{{ url_for('static', filename='js/detect_mobile_browser.js') }}"></script>
 
+            <h1>Classes</h1>
             <table>
                 <thead>
                     <tr>
@@ -317,27 +359,27 @@
                         <th>class_id</th>
                         <th>teacher_id</th>
                         <th>class_name</th>
-                        <th>teacher_intro</th>
+                        <!-- <th>teacher_intro</th>
                         <th>class_schedule</th>
                         <th>class_description</th>
                         <th>class_plan</th>
                         <th>class_requirements</th>
-                        <th>other_notes</th>
+                        <th>other_notes</th> -->
                     </tr>
                 </thead>
                 <tbody>
                     {% for entry in classes %}
                     <tr>
                         <td>{{ loop.index }}</td>
-                        <td>{{ entry[0] }}</td>
+                        <td><a href="/class/{{ entry[0] }}">{{ entry[0] }}</a></td>
                         <td>{{ entry[1] }}</td>
                         <td>{{ entry[2] }}</td>
-                        <td>{{ entry[3] }}</td>
+                        <!-- <td>{{ entry[3] }}</td>
                         <td>{{ entry[4] }}</td>
                         <td>{{ entry[5] }}</td>
                         <td>{{ entry[6] }}</td>
                         <td>{{ entry[7] }}</td>
-                        <td>{{ entry[8] }}</td>
+                        <td>{{ entry[8] }}</td> -->
                     </tr>
                     {% endfor %}
                 </tbody>

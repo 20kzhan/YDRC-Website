@@ -8,6 +8,9 @@ document.addEventListener("DOMContentLoaded", function() {
         // Add your logic to collect form data
         const formData = new FormData(form);
 
+        formData.delete("sub");
+        formData.append("sub", document.getElementById("user_id").innerText)
+
         fetch(form.action, {
             method: 'POST',
             body: formData

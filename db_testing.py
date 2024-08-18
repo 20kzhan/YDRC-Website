@@ -37,7 +37,9 @@ async def main():
             # await cursor.execute("ALTER TABLE enrollments RENAME TO enrollments")
 
             # await cursor.execute("UPDATE students SET class_id = ? WHERE student_id = ?", ('0,0,0,0,0', 'google-oauth2|116934202470070773192'))
-            await cursor.execute("ALTER TABLE students DROP COLUMN class_id")
+            # await cursor.execute("ALTER TABLE students DROP COLUMN class_id")
+
+            await cursor.execute("DELETE FROM teachers WHERE teacher_id = ?", ("google-oauth2|106301162031696627017",))
 
             await conn.commit()
 

@@ -57,6 +57,7 @@ form {
     min-width: 81px;
     /* Additional styles to make it look more like an input */
     outline: none; /* Remove the default focus outline */
+    resize: none;
 }
 
 .placeholder-style {
@@ -116,6 +117,8 @@ th, td {
     padding: 8px;
     text-align: left;
 }
+
+
 
 .delete-btn {
     display: none;

@@ -159,7 +159,6 @@ def get_user(sub):
     
     logging.info(f"User {sub} not found in cache, fetching from Auth0")
     url = f'https://{env.get("AUTH0_DOMAIN")}/api/v2/users/{sub}'
-    print(url)
 
     payload = {}
     headers = {
@@ -1003,9 +1002,14 @@ def change_account_type():
             return jsonify(success=False, message="You do not have permission to do this.")
         
         sub = request.form['sub']
+        print(type(sub))
 
-        print(sub)
-        old_type = get_user(sub)['app_metadata']['account_type']
+        user = get_user(sub)
+        if not user:
+            print("User not found")
+            print(sub)
+            return jsonify(success=False, message="The provided user ID is invalid.")
+        old_type = user['app_metadata']['account_type']
         new_type = request.form['accountType']
         if new_type not in ['student', 'teacher', 'admin']:
             return jsonify(success=False, message="Invalid account type")
@@ -1020,8 +1024,13 @@ def change_account_type():
             cursor.execute(f"UPDATE {old_type}s SET active = 0 WHERE {old_type}_id = ?", (sub,))
 
             if new_type == 'teacher':
-                cursor.execute("UPDATE teachers SET teacher_classes = ? WHERE teacher_id = ?", ('0,0,0,0,0', sub))
-                cursor.execute("UPDATE teachers SET teacher_email = ? WHERE teacher_id = ?", (get_user(sub)['email'], sub))
+                cursor.execute("UPDATE teachers SET teacher_classes = ? WHERE teacher_id = ?", ('0,0,0,0,0', sub,))
+                cursor.execute("UPDATE teachers SET teacher_email = ? WHERE teacher_id = ?", (get_user(sub)['email'], sub,))
+
+                cursor.execute("SELECT * FROM teacher_temp WHERE teacher_id = ?", (sub,))
+                entry = cursor.fetchone()
+                if entry:
+                    cursor.execute("DELETE FROM teacher_temp WHERE teacher_id = ?", (sub,))
 
             db.commit()
         
