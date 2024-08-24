@@ -22,6 +22,13 @@ http://54.176.19.164:443
 - [ ] Settings Menu
 - [ ] Deletion of database rows
 
+# Known Bugs
+- [ ] Back Buttons regularly breaking
+- [ ] Some buttons lead to unknown routes
+- [ ] `get_student_classes` broken (?)
+- [ ] Auth0 Login Photo not loading
+- [ ] "Redirected you too many times" (Result of broken onboarding system)
+- [ ] 
 
 # Questions?
 Please make a github issue above and I will get to it shortly.
