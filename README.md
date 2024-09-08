@@ -16,19 +16,18 @@ http://54.176.19.164:443
 
 # To-Do List
 - [ ] Weekly backups of database (locally on server and possibly in Amazon S3)
-- [ ] Error handling!
+- [x] Error handling!
 - [ ] Logs of database changes
 - [ ] Mobile Support (long-term)
-- [ ] Settings Menu
+- [x] Settings Menu
 - [ ] Deletion of database rows
 
 # Known Bugs
-- [ ] Back Buttons regularly breaking
-- [ ] Some buttons lead to unknown routes
+- [x] Back Buttons regularly breaking
+- [x] Some buttons lead to unknown routes
 - [ ] `get_student_classes` broken (?)
-- [ ] Auth0 Login Photo not loading
-- [ ] "Redirected you too many times" (Result of broken onboarding system)
-- [ ] 
+- [ ] Auth0 Login Photo not loading (doing)
+- [x] "Redirected you too many times" (Result of broken onboarding system)
 
 # Questions?
 Please make a github issue above and I will get to it shortly.
