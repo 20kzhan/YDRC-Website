@@ -7,5 +7,5 @@ var r = gcd (w, h);
 console.log("Aspect Ratio = ", w/r, ":", h/r);
 
 if (w/r < h/r) {
-    alert("This website does not currently support devices with this aspect ratio. Please try landscape mode or a different device.");
+    alert("Warning! Website may be unusable in portrait mode.");
 }
